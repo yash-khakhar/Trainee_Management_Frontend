@@ -1,0 +1,30 @@
+<div class="flex flex-col gap-1.5 w-full">
+    
+    <label [for]="id" class="text-sm font-semibold text-gray-700">
+        {{ label }}
+    </label>
+
+    <input 
+        [id]="id" 
+        [type]="type" 
+        [placeholder]="placeholder" 
+        [disabled]="disabled"
+        [value]="value"
+        (input)="onChange($any($event.target).value)"
+        (blur)="onTouch()"
+        class="w-full px-4 py-3 rounded-xl border text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 transition duration-200"
+        [ngClass]="{
+            'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500': !hasError,
+            'border-red-500 focus:ring-red-500 focus:border-red-500': hasError,
+            'bg-gray-50 cursor-not-allowed text-gray-400': disabled
+        }"
+    />
+
+    @if (hasError) {
+        <small class="text-xs font-semibold text-red-600 mt-0.5 pl-1">
+            {{ errorMessage }}
+        </small>
+    }
+    
+</div>
+
