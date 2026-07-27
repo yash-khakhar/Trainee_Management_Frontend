@@ -1,12 +1,13 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+
 import { AuthService } from '../../services/auth.service';
 import { UserRolesEnum } from '../../enums/user-roles.enum';
 import { UserStatusEnum } from '../../enums/user-status.enum';
 import { CreateUserRequest } from '../../models/create-user-request.model';
-import { ButtonComponent } from '../../../../shared/components/button/button.component';
-import { InputComponent } from '../../../../shared/components/text-input/input.component';
+import { ButtonComponent } from '../../../../shared/components/UI/button/button.component';
+import { InputComponent } from '../../../../shared/components/UI/text-input/input.component';
 
 @Component({
     selector: 'app-register',
@@ -54,7 +55,7 @@ export class RegisterComponent {
 
         const payload: CreateUserRequest = {
             ...formValues,
-            role: Number(formValues.role),
+            role: formValues.role,
             status: UserStatusEnum.ACTIVE // Defaults to Active on creation
         };
 

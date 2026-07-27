@@ -62,6 +62,9 @@
         },
         "serve": {
           "builder": "@angular/build:dev-server",
+          "options": {
+            "port": 5173
+          },
           "configurations": {
             "production": {
               "buildTarget": "TraineeManagementFrontend:build:production"

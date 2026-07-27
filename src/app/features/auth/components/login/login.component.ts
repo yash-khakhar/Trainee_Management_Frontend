@@ -1,15 +1,17 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
+
 import { AuthService } from '../../services/auth.service';
 import { UserLoginRequestDto } from '../../models/user-login-request.model';
-import { ButtonComponent } from '../../../../shared/components/button/button.component';
-import { InputComponent } from '../../../../shared/components/text-input/input.component';
+import { ButtonComponent } from '../../../../shared/components/UI/button/button.component';
+import { InputComponent } from '../../../../shared/components/UI/text-input/input.component';
+import { UserRolesEnum } from '../../enums/user-roles.enum';
 
 @Component({
     selector: 'app-login',
     standalone: true,
-    imports: [ReactiveFormsModule, RouterLink, ButtonComponent, InputComponent],
+    imports: [ReactiveFormsModule, ButtonComponent, InputComponent],
     templateUrl: './login.component.html',
     styleUrl: './login.component.scss'
 })
@@ -39,17 +41,21 @@ export class LoginComponent {
 
         const payload: UserLoginRequestDto = {
             userName: this.loginForm.controls.userName.value,
-            passwordHash: this.loginForm.controls.password.value
+            password: this.loginForm.controls.password.value
         };
 
         this.authService.login(payload).subscribe({
-            next: () => {
+            next: (response) => {
                 this.isLoading.set(false);
-                this.router.navigate(['/dashboard']);
+                if(response.user.role === UserRolesEnum.ADMIN){
+                    this.router.navigate(['/admin']);    
+                } else{
+                    this.router.navigate(['/trainees']);
+                }
             },
             error: (err) => {
                 this.isLoading.set(false);
-                this.errorMessage.set(err.error?.message || 'Invalid credentials or server error.');
+                this.errorMessage.set(err.error?.Message || 'Invalid credentials or server error.');
             }
         });
     }
