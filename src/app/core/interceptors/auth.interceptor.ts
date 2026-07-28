@@ -1,19 +1,19 @@
 import { HttpInterceptorFn } from '@angular/common/http';
-import { inject } from '@angular/core';
-import { CookieStorageService } from '../../shared/services/cookiestorage.service';
+import { environment } from '../../../environments/environment.development';
+
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
-    const cookieStorage = inject(CookieStorageService);
-    const token = cookieStorage.getItem('token');
+    const baseUrl = environment.apiUrl;
 
-    if (token) {
-        const authReq = req.clone({
-            setHeaders: {
-                Authorization: `Bearer ${token}`
-            }
-        });
-        return next(authReq);
+    if(!req.url.startsWith(baseUrl)){
+        return next(req);
     }
-    return next(req);
+
+    const request = req.clone({
+        withCredentials: true
+    })
+
+    return next(request);
+    
 };

@@ -1,20 +1,24 @@
 import { Component, inject } from "@angular/core";
-import { Router } from "@angular/router";
+import { AsyncPipe } from "@angular/common";
+import { Router, RouterLink } from "@angular/router";
+
 import { AuthService } from "../../../features/auth/services/auth.service";
 
 @Component({
     selector: 'app-header',
-    templateUrl: './header.component.html'
+    templateUrl: './header.component.html',
+    imports: [AsyncPipe, RouterLink]
 })
 export class HeaderComponent{
 
     private router = inject(Router)
-    private authService = inject(AuthService)
-
-    isAuthenticated = this.authService.isAuthenticated;
+    authService = inject(AuthService)
 
     onLogout(){
-        this.authService.logout();
-        this.router.navigate(['/auth/login']);
+
+        this.authService.logout().subscribe(() => {
+            this.router.navigate(['/auth/login']);
+        });
+
     }
 }

@@ -2,19 +2,18 @@ import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 
-import { AuthService } from '../../services/auth.service';
-import { UserRolesEnum } from '../../enums/user-roles.enum';
-import { UserStatusEnum } from '../../enums/user-status.enum';
-import { CreateUserRequest } from '../../models/create-user-request.model';
-import { ButtonComponent } from '../../../../shared/components/UI/button/button.component';
-import { InputComponent } from '../../../../shared/components/UI/text-input/input.component';
+import { AuthService } from '../services/auth.service';
+import { UserRolesEnum } from '../enums/user-roles.enum';
+import { UserStatusEnum } from '../enums/user-status.enum';
+import { CreateUserRequest } from '../models/create-user-request.model';
+import { ButtonComponent } from '../../../shared/components/UI/button/button.component';
+import { InputComponent } from '../../../shared/components/UI/text-input/input.component';
 
 @Component({
     selector: 'app-register',
     standalone: true,
     imports: [ReactiveFormsModule, RouterLink, ButtonComponent, InputComponent],
-    templateUrl: './register.component.html',
-    styleUrl: './register.component.scss'
+    templateUrl: './register.component.html'
 })
 export class RegisterComponent {
 
@@ -59,16 +58,17 @@ export class RegisterComponent {
             status: UserStatusEnum.ACTIVE // Defaults to Active on creation
         };
 
-        this.authService.register(payload).subscribe({
-            next: () => {
-                this.isLoading.set(false);
-                this.router.navigate(['/auth/login']);
-            },
-            error: (err) => {
-                this.isLoading.set(false);
-                this.errorMessage.set(err.error?.message || 'Registration failed. Check inputs.');
-            }
-        });
+        // this.authService.register(payload).subscribe({
+        //     next: () => {
+        //         this.isLoading.set(false);
+        //         this.router.navigate(['/auth/login']);
+        //     },
+        //     error: (err) => {
+        //         this.isLoading.set(false);
+        //         this.errorMessage.set(err.error?.message || 'Registration failed. Check inputs.');
+        //     }
+        // });
+        
     }
 
 }

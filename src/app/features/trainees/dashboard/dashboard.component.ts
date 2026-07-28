@@ -1,5 +1,4 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 
 interface TraineeTask {
@@ -12,14 +11,12 @@ interface TraineeTask {
 }
 
 @Component({
-    selector: 'trainee-app-dashboard',
-    templateUrl: './dashboard.component.html',
-    imports: [CommonModule]
+  selector: 'trainee-app-dashboard',
+  templateUrl: './dashboard.component.html',
+  imports: [CommonModule]
 })
 export class DashboardComponent implements OnInit {
 
-  private http = inject(HttpClient);
-  
   traineeTasks = signal<TraineeTask[]>([
     {
       id: '1',

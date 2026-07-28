@@ -1,18 +1,28 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
+import { ApplicationConfig, inject, provideAppInitializer, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { provideClientHydration } from '@angular/platform-browser';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 
 import { routes } from './app.routes';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
-import { CookieService } from 'ngx-cookie-service';
+import { AuthService } from './features/auth/services/auth.service';
+import { firstValueFrom } from 'rxjs';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideBrowserGlobalErrorListeners(),
+
     provideRouter(routes), 
-    provideClientHydration(),
+
     provideHttpClient(withInterceptors([authInterceptor])),
-    CookieService
+
+    provideBrowserGlobalErrorListeners(),
+
+    provideAppInitializer(() => {
+
+      const authService = inject(AuthService);
+
+      return firstValueFrom(authService.initializeAuth())
+
+    })
+
   ]
 };

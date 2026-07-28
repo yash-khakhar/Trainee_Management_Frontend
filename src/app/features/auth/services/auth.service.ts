@@ -1,83 +1,74 @@
-import { Injectable, inject, signal, computed } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, tap } from 'rxjs';
+import { BehaviorSubject, catchError, map, Observable, of, tap } from 'rxjs';
 
 import { UserLoginRequestDto } from '../models/user-login-request.model';
-import { UserLoginResponse } from '../models/user-login-response.model';
-import { CreateUserRequest } from '../models/create-user-request.model';
-import { UserResponse } from '../models/user-response.model';
+import { User } from '../models/user.model';
 import { environment } from '../../../../environments/environment.development';
-import { CookieStorageService } from '../../../shared/services/cookiestorage.service';
-
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
+    private readonly baseUrl = `${environment.apiUrl}/Auth`
+    
     private http = inject(HttpClient);
   
-    private readonly baseUrl = `${environment.apiUrl}/Auth`
+    private userSubject = new BehaviorSubject<User | null>(null);
+    readonly user$ = this.userSubject.asObservable();
 
-    private cookieStorageService = inject(CookieStorageService)
-
-    // State Management with Signals
-    currentUser = signal<UserResponse | null>(this.getStoredUser());
-    token = signal<string | null>(this.getStoredToken());
-    isAuthenticated = computed(() => !!this.token());
+    private initializedSubject = new BehaviorSubject<boolean>(false);
+    readonly initialized$ = this.initializedSubject.asObservable();
 
     constructor(){
-
-        const storedToken = this.getStoredToken();
-        const storedUser = this.getStoredUser();
-
-        if (storedToken) {
-            this.token.set(storedToken);
-        }
-
-        if (storedUser) {
-            this.currentUser.set(storedUser);
-        }
-
+        console.log("Auth Service created: ", this);
+        console.trace();
     }
 
-    login(credentials: UserLoginRequestDto): Observable<UserLoginResponse> {
-        return this.http.post<UserLoginResponse>(`${this.baseUrl}/login`, credentials).pipe(
-            tap((response) => this.setSession(response))
+    get currentUser() : User | null {
+        return this.userSubject.value;
+    }
+
+    get isLoggedIn(): boolean{
+        return this.userSubject.value !== null;
+    }
+
+    login(credentials: UserLoginRequestDto): Observable<User> {
+        return this.http.post<User>(`${this.baseUrl}/login`, credentials)
+            .pipe(
+                tap((response) => this.userSubject.next(response)
+            )
         );
     }
 
-   
-    register(userData: CreateUserRequest): Observable<UserResponse> {
-        return this.http.post<UserResponse>(`${this.baseUrl}/register`, userData);
+    initializeAuth() : Observable<void>{
+
+        return this.http.get<User>(`${this.baseUrl}/me`
+        ).pipe(
+            tap(user => {
+                console.log("initizalie auth:" + user)
+                this.userSubject.next(user)
+            }),
+            catchError(() => {
+                this.userSubject.next(null);
+                return of(null);
+            }),
+            tap(() => {
+                this.initializedSubject.next(true)
+            }),
+            map(() => void 0)
+        )
     }
 
-    logout(): void {
+    logout(): Observable<void> {
         
-        this.cookieStorageService.removeKey("user");
-        this.cookieStorageService.removeKey("token");
-
-        this.token.set(null);
-        this.currentUser.set(null);
+        return this.http.post<void>(`${this.baseUrl}/logout`, {}).pipe(
+            tap(() => {
+                this.userSubject.next(null);
+            })
+        )
+        
     }
 
-    private setSession(authResult: UserLoginResponse): void {
-
-        this.cookieStorageService.setItem("token", authResult.token);
-        this.cookieStorageService.setItem("user", authResult.user);
-
-        console.log(this.cookieStorageService.getItem('token'));
-
-        this.token.set(authResult.token);
-        this.currentUser.set(authResult.user);
-    }
-
-    private getStoredUser(): UserResponse | null {
-        return this.cookieStorageService.getItem("user");
-    }
-
-    private getStoredToken(): string | null {
-        console.log("ST: " + this.cookieStorageService.getItem("token"));
-        return this.cookieStorageService.getItem("token");
-    }
 }

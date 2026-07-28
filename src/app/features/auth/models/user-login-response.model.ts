@@ -1,7 +1,7 @@
-import { UserResponse } from './user-response.model';
+import { User } from './user.model';
 
 export interface UserLoginResponse {
     token: string;
     expiresIn: number;
-    user: UserResponse;
+    user: User;
 }

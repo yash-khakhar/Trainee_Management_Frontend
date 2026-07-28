@@ -2,18 +2,17 @@ import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { AuthService } from '../../services/auth.service';
-import { UserLoginRequestDto } from '../../models/user-login-request.model';
-import { ButtonComponent } from '../../../../shared/components/UI/button/button.component';
-import { InputComponent } from '../../../../shared/components/UI/text-input/input.component';
-import { UserRolesEnum } from '../../enums/user-roles.enum';
+import { AuthService } from '../services/auth.service';
+import { UserLoginRequestDto } from '../models/user-login-request.model';
+import { ButtonComponent } from '../../../shared/components/UI/button/button.component';
+import { InputComponent } from '../../../shared/components/UI/text-input/input.component';
+import { UserRolesEnum } from '../enums/user-roles.enum';
 
 @Component({
     selector: 'app-login',
     standalone: true,
     imports: [ReactiveFormsModule, ButtonComponent, InputComponent],
-    templateUrl: './login.component.html',
-    styleUrl: './login.component.scss'
+    templateUrl: './login.component.html'
 })
 export class LoginComponent {
 
@@ -45,9 +44,10 @@ export class LoginComponent {
         };
 
         this.authService.login(payload).subscribe({
-            next: (response) => {
+            next: (user) => {
                 this.isLoading.set(false);
-                if(response.user.role === UserRolesEnum.ADMIN){
+                if(user.role === UserRolesEnum.ADMIN){
+                    console.log(user)
                     this.router.navigate(['/admin']);    
                 } else{
                     this.router.navigate(['/trainees']);
