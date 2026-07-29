@@ -47,7 +47,6 @@ export class LoginComponent {
             next: (user) => {
                 this.isLoading.set(false);
                 if(user.role === UserRolesEnum.ADMIN){
-                    console.log(user)
                     this.router.navigate(['/admin']);    
                 } else{
                     this.router.navigate(['/trainees']);
