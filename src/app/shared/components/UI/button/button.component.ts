@@ -16,6 +16,8 @@ export class ButtonComponent {
     @Input() loadingText = 'Loading...';
     @Input() fullWidth = false;
 
+    @Input() customClass = '';
+
     // Emits a safe event when clicked for general purposes
     @Output() btnClick = new EventEmitter<MouseEvent>();
 

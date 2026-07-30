@@ -1,0 +1,58 @@
+<app-data-table 
+    title="Trainees List" 
+    [columns]="[
+        { key: 'trainee', label: 'Trainee' },
+        { key: 'techStack', label: 'Tech Stack' },
+        { key: 'status', label: 'Status' }
+    ]" 
+    [pageNumber]="currentPage()" 
+    [pageSize]="pageSize()" 
+    [totalRecords]="traineeData()?.totalRecords || 0"
+    [isLoading]="isLoadingTrainees()" 
+    (pageChange)="changePage($event)"
+>
+    <!-- Search & Status Filter Controls -->
+    <div filters class="flex items-center gap-2 w-full sm:w-auto">
+        <input type="text" [value]="searchQuery()" (input)="onSearchChange($event)" placeholder="Search trainees..."
+            class="px-3 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 w-full sm:w-48" />
+
+        <select [value]="selectedStatus()" (change)="onStatusChange($event)"
+            class="px-3 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 bg-white">
+            <option [value]="TraineeStatusEnum.ACTIVE" [selected]="selectedStatus() === TraineeStatusEnum.ACTIVE">
+                Active</option>
+            <option [value]="TraineeStatusEnum.INACTIVE" [selected]="selectedStatus() === TraineeStatusEnum.INACTIVE">
+                Inactive</option>
+        </select>
+    </div>
+
+    <!-- Table Body Rows -->
+    @if (traineeData(); as list) {
+
+        @for (trainee of list.data; track trainee.id) {
+            <tr (click)="selectTrainee(trainee.id)" class="hover:bg-gray-50 cursor-pointer transition-colors">
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="text-sm font-medium text-gray-900">{{ trainee.firstName }} {{ trainee.lastName }}</div>
+                    <div class="text-xs text-gray-500">{{ trainee.email }}</div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                    {{ trainee.techStack }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <span
+                        [class]="trainee.status === TraineeStatusEnum.ACTIVE ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'"
+                        class="px-2.5 py-0.5 rounded-full text-xs font-medium">
+                        {{ trainee.status }}
+                    </span>
+                </td>
+            </tr>
+        }
+
+        @if (list.data.length === 0) {
+            <tr>
+                <td colspan="3" class="px-6 py-8 text-center text-sm text-gray-500">No trainees found.</td>
+            </tr>
+        }
+
+    }
+
+</app-data-table>

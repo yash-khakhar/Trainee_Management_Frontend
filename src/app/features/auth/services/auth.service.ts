@@ -5,6 +5,7 @@ import { BehaviorSubject, catchError, map, Observable, of, tap } from 'rxjs';
 import { UserLoginRequestDto } from '../models/user-login-request.model';
 import { User } from '../models/user.model';
 import { environment } from '../../../../environments/environment.development';
+import { CreateUserRequest } from '../models/create-user-request.model';
 
 @Injectable({
   providedIn: 'root'
@@ -21,11 +22,6 @@ export class AuthService {
     private initializedSubject = new BehaviorSubject<boolean>(false);
     readonly initialized$ = this.initializedSubject.asObservable();
 
-    constructor(){
-        console.log("Auth Service created: ", this);
-        console.trace();
-    }
-
     get currentUser() : User | null {
         return this.userSubject.value;
     }
@@ -40,6 +36,10 @@ export class AuthService {
                 tap((response) => this.userSubject.next(response)
             )
         );
+    }
+
+    register(userData: CreateUserRequest): Observable<any> {
+        return this.http.post<any>(`${this.baseUrl}/register`, userData);
     }
 
     initializeAuth() : Observable<void>{

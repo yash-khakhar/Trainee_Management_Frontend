@@ -17,6 +17,33 @@ export const ADMIN_ROUTES: Routes = [
         data: {
             roles: [UserRolesEnum.ADMIN]
         },
-        loadComponent: () => import('./admin.component').then(m => m.AdminDashboardComponent)
+        loadComponent: () => import('./admin.component').then(c => c.AdminDashboardComponent)
+    },
+
+    {
+        path: 'create-user',
+        canActivate: [authGuard],
+        data: {
+            roles: [UserRolesEnum.ADMIN]
+        },
+        loadComponent: () => import('./add-user/add-user.component').then(c => c.AddUserComponent)
+    },
+
+    {
+        path: 'trainees-list',
+        canActivate: [authGuard],
+        data: {
+            roles: [UserRolesEnum.ADMIN]
+        },
+        loadComponent: () => import('./trainees/trainee-list/view-trainee-list.component').then(c => c.ViewTraineesListComponent)
+    },
+
+    {
+        path: 'trainees/:id',
+        canActivate: [authGuard],
+        data: {
+            roles: [UserRolesEnum.ADMIN]
+        },
+        loadComponent: () => import('./trainees/trainee-details/trainee-details.component').then(c => c.TraineeDetailComponent)
     }
 ];

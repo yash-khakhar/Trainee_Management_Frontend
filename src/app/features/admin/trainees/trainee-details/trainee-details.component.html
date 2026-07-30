@@ -1,0 +1,26 @@
+<app-admin-layout>
+    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+        
+        @if (isLoading()) {
+            <p class="text-sm text-gray-500 text-center py-6">Loading trainee details...</p>
+        } @else {
+            @if (trainee(); as t) {
+                <h1 class="text-2xl font-bold text-gray-900 mb-2">Trainee Details</h1>
+                <p class="text-sm text-gray-600 mb-4">Viewing profile information for ID: <span class="font-semibold text-indigo-600">{{ t.id }}</span></p>
+                
+                <div class="space-y-2 border-t border-gray-100 pt-4">
+                    <p class="text-sm text-gray-700"><strong>Name:</strong> {{ t.firstName }} {{ t.lastName }}</p>
+                    <p class="text-sm text-gray-700"><strong>Email:</strong> {{ t.email }}</p>
+                    <p class="text-sm text-gray-700"><strong>Tech Stack:</strong> {{ t.techStack }}</p>
+                    <p class="text-sm text-gray-700"><strong>Status:</strong> {{ t.status }}</p>
+                </div>
+            } @else {
+                <div class="text-center py-8">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-1">No trainee found</h2>
+                    <p class="text-sm text-gray-500">The trainee you are looking for does not exist or was removed.</p>
+                </div>
+            }
+        }
+
+    </div>
+</app-admin-layout>

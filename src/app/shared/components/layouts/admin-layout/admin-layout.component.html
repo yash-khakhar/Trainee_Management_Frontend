@@ -1,0 +1,20 @@
+<div class="min-h-screen bg-gray-50 flex">
+    <!-- Sidebar Integration -->
+    <app-sidebar></app-sidebar>
+
+    <!-- Main Content Area -->
+    <div class="flex-1 flex flex-col min-w-0 overflow-y-auto">
+
+        <!-- Mobile Top Nav Bar -->
+        <header class="bg-white border-b border-gray-200 h-16 flex items-center justify-between px-6 md:hidden">
+            <span class="text-lg font-bold text-indigo-600">AdminPortal</span>
+            <span class="text-xs bg-indigo-100 text-indigo-800 px-2.5 py-1 rounded-full font-medium">Admin</span>
+        </header>
+
+        <!-- Dynamic Main Content Wrapper Container -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 w-full">
+            <ng-content></ng-content>
+        </div>
+
+    </div>
+</div>

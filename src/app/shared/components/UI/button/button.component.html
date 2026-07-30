@@ -1,7 +1,7 @@
 <button
   [type]="type"
   [disabled]="disabled || isLoading"
-  [ngClass]="buttonClasses"
+  [ngClass]="customClass"
   (click)="onClick($event)"
 >
   @if (isLoading) {

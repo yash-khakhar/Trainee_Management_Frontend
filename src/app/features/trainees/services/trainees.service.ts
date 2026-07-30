@@ -1,7 +1,7 @@
 import { inject, Injectable } from "@angular/core";
 import { environment } from "../../../../environments/environment.development";
 import { HttpClient, HttpParams } from "@angular/common/http";
-import { BehaviorSubject, Observable, tap } from "rxjs";
+import { BehaviorSubject, map, Observable, tap } from "rxjs";
 
 import { TraineeList } from "../models/trainee-list.model";
 import { TraineeStatusEnum } from "../models/traineestatus.enum";
@@ -42,13 +42,19 @@ export class TraineeService{
         if (status) {
             params = params.set('status', status);
         }
-
+    
         return this.http.get<TraineeList>(this.baseUrl, { params }).pipe(
             tap((response: TraineeList) => {
                 this.traineeListSubject.next(response);
             })
         );
 
+    }
+
+    getTraineeById(id: number){
+        return this.traineeList$.pipe(
+            map(response => response?.data.find(trainee => trainee.id === id) || null)
+        );
     }
 
 }

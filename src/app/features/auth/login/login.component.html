@@ -1,6 +1,4 @@
-<div
-    class="max-w-md mx-auto my-12 p-8 bg-white rounded-2xl shadow-xl border border-gray-100 transition-all duration-300">
-
+<div class="max-w-md mx-auto my-12 p-8 bg-white rounded-2xl shadow-xl border border-gray-100 transition-all duration-300">
 
     <h2 class="text-3xl font-extrabold text-gray-900 text-center mb-6 tracking-tight">Sign In</h2>
 
@@ -30,21 +28,13 @@
             formControlName="password" class="block mb-7"></app-input>
 
         <!-- Our Shared Multipurpose Button from earlier -->
-        <app-button type="submit" [disabled]="loginForm.invalid" [isLoading]="isLoading()" loadingText="Logging in..."
+        <app-button 
+            customClass="py-3 px-4 font-semibold rounded-xl shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition duration-200 flex justify-center items-center gap-2 disabled:cursor-not-allowed disabled:shadow-none bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 text-white focus:ring-indigo-500 w-full mt-2"
+            type="submit" [disabled]="loginForm.invalid" [isLoading]="isLoading()" loadingText="Logging in..."
             [fullWidth]="true">
             Login
         </app-button>
 
     </form>
-
-
-    <!-- Footer Navigation Link -->
-    <!-- <p class="mt-8 text-center text-sm font-medium text-gray-600">
-        Don't have an account?
-        <a routerLink="/auth/register"
-            class="font-semibold text-indigo-600 hover:text-indigo-500 underline underline-offset-4 transition duration-200">
-            Register here
-        </a>
-    </p> -->
 
 </div>
