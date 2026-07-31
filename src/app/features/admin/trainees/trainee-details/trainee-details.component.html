@@ -1,25 +1,41 @@
 <app-admin-layout>
     <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-        
+
         @if (isLoading()) {
-            <p class="text-sm text-gray-500 text-center py-6">Loading trainee details...</p>
+        <p class="text-sm text-gray-500 text-center py-6">Loading trainee details...</p>
         } @else {
-            @if (trainee(); as t) {
-                <h1 class="text-2xl font-bold text-gray-900 mb-2">Trainee Details</h1>
-                <p class="text-sm text-gray-600 mb-4">Viewing profile information for ID: <span class="font-semibold text-indigo-600">{{ t.id }}</span></p>
-                
-                <div class="space-y-2 border-t border-gray-100 pt-4">
-                    <p class="text-sm text-gray-700"><strong>Name:</strong> {{ t.firstName }} {{ t.lastName }}</p>
-                    <p class="text-sm text-gray-700"><strong>Email:</strong> {{ t.email }}</p>
-                    <p class="text-sm text-gray-700"><strong>Tech Stack:</strong> {{ t.techStack }}</p>
-                    <p class="text-sm text-gray-700"><strong>Status:</strong> {{ t.status }}</p>
-                </div>
-            } @else {
-                <div class="text-center py-8">
-                    <h2 class="text-xl font-semibold text-gray-800 mb-1">No trainee found</h2>
-                    <p class="text-sm text-gray-500">The trainee you are looking for does not exist or was removed.</p>
-                </div>
-            }
+        @if (trainee(); as t) {
+        <!-- Header with Title and Edit Button -->
+        <div class="flex justify-between items-start mb-4">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-900 mb-1">Trainee Details</h1>
+                <p class="text-sm text-gray-600">Viewing profile information for ID: <span
+                        class="font-semibold text-indigo-600">{{ t.id }}</span></p>
+            </div>
+
+            <!-- Edit Button -->
+            <a [routerLink]="['/admin/trainees', t.id, 'edit']"
+                class="inline-flex items-center gap-1.5 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-lg shadow-sm transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
+                Edit Profile
+            </a>
+        </div>
+
+        <div class="space-y-2 border-t border-gray-100 pt-4">
+            <p class="text-sm text-gray-700"><strong>Name:</strong> {{ t.firstName }} {{ t.lastName }}</p>
+            <p class="text-sm text-gray-700"><strong>Email:</strong> {{ t.email }}</p>
+            <p class="text-sm text-gray-700"><strong>Tech Stack:</strong> {{ t.techStack }}</p>
+            <p class="text-sm text-gray-700"><strong>Status:</strong> {{ t.status }}</p>
+        </div>
+        } @else {
+        <div class="text-center py-8">
+            <h2 class="text-xl font-semibold text-gray-800 mb-1">No trainee found</h2>
+            <p class="text-sm text-gray-500">The trainee you are looking for does not exist or was removed.</p>
+        </div>
+        }
         }
 
     </div>

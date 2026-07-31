@@ -7,6 +7,10 @@ import { AdminLayoutComponent } from '../../../../shared/components/layouts/admi
     selector: 'view-app-trainees-list',
     standalone: true,
     imports: [TraineesListComponent, AdminLayoutComponent],
-    template: `<app-admin-layout><app-trainees-list></app-trainees-list></app-admin-layout>`
+    template: `
+        <app-admin-layout>
+            <app-trainees-list></app-trainees-list>
+        </app-admin-layout>
+    `
 })
 export class ViewTraineesListComponent { }

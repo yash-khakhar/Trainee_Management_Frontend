@@ -1,7 +1,8 @@
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
-import { finalize } from 'rxjs';
+import { debounceTime, finalize, distinctUntilChanged } from 'rxjs';
+import { toObservable } from '@angular/core/rxjs-interop';
 
 import { DataTableComponent } from '../../../../shared/components/UI/data-table/data-table.component';
 import { TraineeStatusEnum } from '../../../trainees/models/traineestatus.enum';
@@ -30,6 +31,18 @@ export class TraineesListComponent {
 
     traineeData = signal<TraineeList | null>(null);
 
+    private search$ = toObservable(this.searchQuery);
+
+    constructor() {
+        this.search$.pipe(
+            debounceTime(400), 
+            distinctUntilChanged() 
+        ).subscribe(query => {
+            this.currentPage.set(1);
+            this.fetchTrainees();
+        });
+    }
+
     ngOnInit(): void {
         this.traineeService.traineeList$.subscribe(data => {
             if (data) {
@@ -51,9 +64,10 @@ export class TraineesListComponent {
 
     onSearchChange(event: Event) {
         const value = (event.target as HTMLInputElement).value;
+        // this.searchQuery.set(value);
+        // this.currentPage.set(1);
+        // this.fetchTrainees();
         this.searchQuery.set(value);
-        this.currentPage.set(1);
-        this.fetchTrainees();
     }
 
     onStatusChange(event: Event) {

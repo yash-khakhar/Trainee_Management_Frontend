@@ -44,6 +44,15 @@ export const ADMIN_ROUTES: Routes = [
         data: {
             roles: [UserRolesEnum.ADMIN]
         },
-        loadComponent: () => import('./trainees/trainee-details/trainee-details.component').then(c => c.TraineeDetailComponent)
+        children: [
+            {
+                path: '',
+                loadComponent: () => import('./trainees/trainee-details/trainee-details.component').then(c => c.TraineeDetailComponent)
+            },
+            {
+                path: 'edit',
+                loadComponent: () => import('./edit-user/edit-user.component').then(c => c.EditUserComponent)
+            }
+        ]
     }
 ];

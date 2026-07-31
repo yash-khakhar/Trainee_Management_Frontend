@@ -1,6 +1,8 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
+import { RouterModule } from '@angular/router';
+
 import { AdminLayoutComponent } from '../../../../shared/components/layouts/admin-layout/admin-layout.component';
 import { TraineeService } from '../../../trainees/services/trainees.service';
 import { Trainee } from '../../../trainees/models/trainee.model';
@@ -8,7 +10,7 @@ import { Trainee } from '../../../trainees/models/trainee.model';
 @Component({
     selector: 'app-trainee-detail',
     standalone: true,
-    imports: [CommonModule, AdminLayoutComponent],
+    imports: [CommonModule, AdminLayoutComponent, RouterModule],
     templateUrl: './trainee-details.component.html'
 })
 export class TraineeDetailComponent implements OnInit {
@@ -18,6 +20,10 @@ export class TraineeDetailComponent implements OnInit {
 
     trainee = signal<Trainee | null>(null);
     isLoading = signal<boolean>(true);
+
+    constructor(){
+        
+    }
 
     ngOnInit(): void {
 

@@ -5,6 +5,8 @@ import { BehaviorSubject, map, Observable, tap } from "rxjs";
 
 import { TraineeList } from "../models/trainee-list.model";
 import { TraineeStatusEnum } from "../models/traineestatus.enum";
+import { Trainee } from "../models/trainee.model";
+import { UpdateTraineeRequest } from "../models/update-trainee-request";
 
 @Injectable({
     providedIn: 'root'
@@ -52,8 +54,14 @@ export class TraineeService{
     }
 
     getTraineeById(id: number){
-        return this.traineeList$.pipe(
-            map(response => response?.data.find(trainee => trainee.id === id) || null)
+        return this.http.get<Trainee>(`${this.baseUrl}/${id}`).pipe(
+            map((response:Trainee) => response)
+        );
+    }
+
+    updateTrainee(traineeData: UpdateTraineeRequest){
+        return this.http.put<Trainee>(`${this.baseUrl}/`, traineeData).pipe(
+            map((response:Trainee) => response)
         );
     }
 
