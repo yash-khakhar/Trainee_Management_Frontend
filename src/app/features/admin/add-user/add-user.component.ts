@@ -1,6 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
 
 import { AuthService } from '../../auth/services/auth.service';
 import { UserRolesEnum } from '../../auth/enums/user-roles.enum';
@@ -20,7 +19,6 @@ export class AddUserComponent {
 
     private fb = inject(FormBuilder);
     private authService = inject(AuthService);
-    private router = inject(Router);
 
     isLoading = signal<boolean>(false);
     errorMessage = signal<string | null>(null);

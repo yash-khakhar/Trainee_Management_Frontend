@@ -13,6 +13,6 @@ export class NotFoundComponent {
     private router = inject(Router);
 
     goBack(): void {
-        this.router.navigate(['/admin/dashboard']);
+        this.router.navigate(['/admin']);
     }
 }

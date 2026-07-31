@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { finalize } from 'rxjs';
 
 import { TraineeService } from '../../trainees/services/trainees.service';
@@ -23,7 +23,6 @@ export class EditUserComponent implements OnInit {
     private fb = inject(FormBuilder);
     private traineeService = inject(TraineeService);
     private route = inject(ActivatedRoute);
-    private router = inject(Router);
 
     isLoading = signal<boolean>(false);
     isFetching = signal<boolean>(true);
