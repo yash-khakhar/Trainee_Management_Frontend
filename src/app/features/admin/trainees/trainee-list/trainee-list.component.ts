@@ -64,9 +64,6 @@ export class TraineesListComponent {
 
     onSearchChange(event: Event) {
         const value = (event.target as HTMLInputElement).value;
-        // this.searchQuery.set(value);
-        // this.currentPage.set(1);
-        // this.fetchTrainees();
         this.searchQuery.set(value);
     }
 

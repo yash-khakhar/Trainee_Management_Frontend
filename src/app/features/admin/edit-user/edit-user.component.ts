@@ -28,7 +28,7 @@ export class EditUserComponent implements OnInit {
     isLoading = signal<boolean>(false);
     isFetching = signal<boolean>(true);
     errorMessage = signal<string | null>(null);
-    successMessage = signal<string | null>(null); // Added success message signal
+    successMessage = signal<string | null>(null);
     userId!: number;
 
     status = [
@@ -88,7 +88,7 @@ export class EditUserComponent implements OnInit {
 
         this.isLoading.set(true);
         this.errorMessage.set(null);
-        this.successMessage.set(null); // Clear previous success message
+        this.successMessage.set(null); 
 
         const formValues = this.editForm.getRawValue();
 
@@ -101,7 +101,6 @@ export class EditUserComponent implements OnInit {
             finalize(() => this.isLoading.set(false))
         ).subscribe({
             next: () => {
-                // Show success message and stay on the same page
                 this.successMessage.set('Trainee profile updated successfully!');
             },
             error: (err) => {

@@ -21,10 +21,6 @@ export class TraineeDetailComponent implements OnInit {
     trainee = signal<Trainee | null>(null);
     isLoading = signal<boolean>(true);
 
-    constructor(){
-        
-    }
-
     ngOnInit(): void {
 
         const id = Number(this.route.snapshot.paramMap.get('id'));
