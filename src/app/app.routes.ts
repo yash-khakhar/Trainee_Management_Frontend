@@ -1,4 +1,6 @@
 import { Routes } from '@angular/router';
+import { authGuard } from './core/guards/auth.guard';
+import { UserRolesEnum } from './features/auth/enums/user-roles.enum';
 
 export const routes: Routes = [
 
@@ -20,6 +22,10 @@ export const routes: Routes = [
 
     {
         path: 'admin',
+        canActivate: [authGuard],
+        data: {
+            roles: [UserRolesEnum.ADMIN]
+        },
         loadChildren: () => import('./features/admin/admin.routes').then(r => r.ADMIN_ROUTES)
     },
 
@@ -30,7 +36,7 @@ export const routes: Routes = [
 
     {
         path: '**',
-        redirectTo: 'auth'
+        loadComponent: () => import('./shared/components/not-found/not-found.component').then(c => c.NotFoundComponent)
     }
 
 ];

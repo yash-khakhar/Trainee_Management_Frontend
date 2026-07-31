@@ -17,12 +17,14 @@ import { AdminLayoutComponent } from '../../../shared/components/layouts/admin-l
     templateUrl: './add-user.component.html'
 })
 export class AddUserComponent {
+
     private fb = inject(FormBuilder);
     private authService = inject(AuthService);
     private router = inject(Router);
 
     isLoading = signal<boolean>(false);
     errorMessage = signal<string | null>(null);
+    successMessage = signal<string | null>(null);
 
     status = [
         { label: 'Active', value: UserStatusEnum.ACTIVE },
@@ -66,11 +68,11 @@ export class AddUserComponent {
         this.authService.register(payload).subscribe({
             next: () => {
                 this.isLoading.set(false);
-                this.router.navigate(['/admin']);
+                this.successMessage.set('User Created successfully!');
             },
             error: (err) => {
                 this.isLoading.set(false);
-                this.errorMessage.set(err.error?.message || 'Account Creation failed. Check inputs.');
+                this.errorMessage.set(err.error?.Message || 'Account Creation failed. Check inputs.');
             }
         });
     }
