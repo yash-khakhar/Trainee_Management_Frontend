@@ -5,102 +5,107 @@ import { debounceTime, distinctUntilChanged, switchMap, tap, finalize } from 'rx
 import { toObservable } from '@angular/core/rxjs-interop';
 
 import { DataTableComponent } from '../../../../shared/components/UI/data-table/data-table.component';
-import { TraineeStatusEnum } from '../../../trainees/models/traineestatus.enum';
-import { TraineeService } from '../../../trainees/services/trainees.service';
-import { TraineeList } from '../../../trainees/models/trainee-list.model';
+import { MentorStatusEnum } from '../../../mentors/models/mentorstatus.enum';
+import { MentorsService } from '../../../mentors/services/mentors.service';
+import { MentorList } from '../../../mentors/models/mentors-list.model';
 
 @Component({
-    selector: 'app-trainees-list',
+    selector: 'app-mentors-list',
     standalone: true,
     imports: [CommonModule, RouterModule, DataTableComponent],
-    templateUrl: './trainee-list.component.html'
+    templateUrl: './mentor-list.component.html'
 })
-export class TraineesListComponent {
+export class MentorsListComponent {
 
-    private traineeService = inject(TraineeService);
+    private mentorService = inject(MentorsService);
     private router = inject(Router);
 
-    TraineeStatusEnum = TraineeStatusEnum;
+    MentorStatusEnum = MentorStatusEnum;
 
     currentPage = signal<number>(1);
     pageSize = signal<number>(5);
     searchQuery = signal<string>('');
-    selectedStatus = signal<TraineeStatusEnum>(TraineeStatusEnum.ACTIVE);
-    isLoadingTrainees = signal<boolean>(false);
+    selectedStatus = signal<MentorStatusEnum>(MentorStatusEnum.ACTIVE);
+    isLoading = signal<boolean>(false);
 
     private searchQuery$ = toObservable(this.searchQuery);
 
-    traineeData = signal<TraineeList | null>(null);
+    mentorData = signal<MentorList | null>(null);
 
     constructor() {
-        
+       
         this.searchQuery$.pipe(
             debounceTime(400),
             distinctUntilChanged(),
             tap(() => this.currentPage.set(1)),
             switchMap(() => {
-                this.isLoadingTrainees.set(true);
-                return this.traineeService.getTrainees(
+                this.isLoading.set(true);
+                return this.mentorService.getMentors(
                     this.currentPage(),
                     this.pageSize(),
                     this.searchQuery(),
                     this.selectedStatus()
                 ).pipe(
-                    finalize(() => this.isLoadingTrainees.set(false))
+                    finalize(() => this.isLoading.set(false))
                 );
             })
         ).subscribe({
             next: (response) => {
-                if (response) this.traineeData.set(response);
+                if (response) {
+                    this.mentorData.set(response);
+                }
+            },
+            error: (err) => {
+                
             }
         });
-
     }
 
     onSearchChange(event: Event) {
         const value = (event.target as HTMLInputElement).value;
-        this.searchQuery.set(value);
+        this.searchQuery.set(value); 
     }
 
     onStatusChange(event: Event) {
-        const value = (event.target as HTMLSelectElement).value as TraineeStatusEnum;
+        const value = (event.target as HTMLSelectElement).value as MentorStatusEnum;
         this.selectedStatus.set(value);
         this.currentPage.set(1);
-        this.fetchTrainees();
+        this.fetchMentors();
     }
 
     changePage(newPage: number) {
         this.currentPage.set(newPage);
-        this.fetchTrainees();
+        this.fetchMentors();
     }
 
-    fetchTrainees() {
-        this.isLoadingTrainees.set(true);
+    fetchMentors() {
+        this.isLoading.set(true);
 
-        this.traineeService.getTrainees(
+        this.mentorService.getMentors(
             this.currentPage(),
             this.pageSize(),
             this.searchQuery(),
             this.selectedStatus()
         ).pipe(
-            finalize(() => this.isLoadingTrainees.set(false))
+            finalize(() => this.isLoading.set(false))
         ).subscribe({
             next: (response) => {
                 if (response) {
-                    this.traineeData.set(response);
+                    this.mentorData.set(response);
                 }
             },
             error: (err) => {
+                
             }
         });
     }
 
     getTotalPages = computed(() => {
-        const data = this.traineeData();
+        const data = this.mentorData();
         return Math.ceil((data?.totalRecords || 0) / this.pageSize()) || 1;
     });
 
-    selectTrainee(id: number) {
-        this.router.navigate(['/admin/trainees', id]);
+    selectMentor(id: number) {
+        this.router.navigate(['/admin/mentors', id]);
     }
 }

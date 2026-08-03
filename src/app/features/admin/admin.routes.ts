@@ -34,13 +34,38 @@ export const ADMIN_ROUTES: Routes = [
                     },
                     {
                         path: 'edit',
-                        loadComponent: () => import('./edit-user/edit-user.component').then(c => c.EditUserComponent)
+                        loadComponent: () => import('./trainees/edit-trainee/edit-trainee.component').then(c => c.EditUserComponent)
                     }
                 ],
                 
             }
         ]
     },
+
+    {
+        path: 'mentors',
+        children: [
+            {
+                path: '',
+                loadComponent: () => import('./mentor/mentor-list/view-mentor-list.component').then(c => c.ViewMentorsListComponent)
+            },
+            {
+                path: ':id',
+                children: [
+                    {
+                        path: '',
+                        loadComponent: () => import('./mentor/mentor-details/mentor-details.component').then(c => c.MentorDetailComponent)
+                    },
+                    {
+                        path: 'edit',
+                        loadComponent: () => import('./mentor/edit-mentor/edit-mentor.component').then(c => c.EditMentorComponent)
+                    }
+                ],
+                
+            }
+        ]
+    },
+
 
     {
         path: '**',
