@@ -3,9 +3,9 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { RouterModule } from '@angular/router';
 
-import { AdminLayoutComponent } from '../../../../shared/components/layouts/admin-layout/admin-layout.component';
-import { MentorsService } from '../../../mentors/services/mentors.service';
-import { Mentor } from '../../../mentors/models/mentors.model';
+import { AdminLayoutComponent } from '../../../shared/components/layouts/admin-layout/admin-layout.component';
+import { MentorsService } from '../services/mentors.service';
+import { Mentor } from '../models/mentors.model';
 
 @Component({
     selector: 'app-mentor-detail',

@@ -4,10 +4,10 @@ import { Router, RouterModule } from '@angular/router';
 import { debounceTime, distinctUntilChanged, switchMap, tap, finalize } from 'rxjs';
 import { toObservable } from '@angular/core/rxjs-interop';
 
-import { DataTableComponent } from '../../../../shared/components/UI/data-table/data-table.component';
-import { TraineeStatusEnum } from '../../../trainees/models/traineestatus.enum';
-import { TraineeService } from '../../../trainees/services/trainees.service';
-import { TraineeList } from '../../../trainees/models/trainee-list.model';
+import { DataTableComponent } from '../../../shared/components/UI/data-table/data-table.component';
+import { TraineeStatusEnum } from '../models/traineestatus.enum';
+import { TraineeService } from '../services/trainees.service';
+import { TraineeList } from '../models/trainee-list.model';
 
 @Component({
     selector: 'app-trainees-list',

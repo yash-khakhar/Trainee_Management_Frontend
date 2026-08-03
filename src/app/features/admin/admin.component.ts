@@ -8,7 +8,7 @@ import { TraineeStatusEnum } from '../trainees/models/traineestatus.enum';
 import { TraineeList } from '../trainees/models/trainee-list.model';
 import { ButtonComponent } from '../../shared/components/UI/button/button.component';
 import { AdminLayoutComponent } from '../../shared/components/layouts/admin-layout/admin-layout.component';
-import { TraineesListComponent } from './trainees/trainee-list/trainee-list.component';
+import { TraineesListComponent } from '../trainees/trainee-list/trainee-list.component';
 
 interface Assignment {
   id: string;

@@ -3,14 +3,14 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { finalize } from 'rxjs';
 
-import { TraineeService } from '../../../trainees/services/trainees.service';
-import { UserRolesEnum } from '../../../auth/enums/user-roles.enum';
-import { ButtonComponent } from '../../../../shared/components/UI/button/button.component';
-import { InputComponent } from '../../../../shared/components/UI/text-input/input.component';
-import { AdminLayoutComponent } from '../../../../shared/components/layouts/admin-layout/admin-layout.component';
-import { TraineeStatusEnum } from '../../../trainees/models/traineestatus.enum';
+import { TraineeService } from '../services/trainees.service';
+import { UserRolesEnum } from '../../auth/enums/user-roles.enum';
+import { ButtonComponent } from '../../../shared/components/UI/button/button.component';
+import { InputComponent } from '../../../shared/components/UI/text-input/input.component';
+import { AdminLayoutComponent } from '../../../shared/components/layouts/admin-layout/admin-layout.component';
+import { TraineeStatusEnum } from '../models/traineestatus.enum';
 import { CommonModule } from '@angular/common';
-import { UpdateTraineeRequest } from '../../../trainees/models/update-trainee-request';
+import { UpdateTraineeRequest } from '../models/update-trainee-request';
 
 @Component({
     selector: 'app-edit-trainee',

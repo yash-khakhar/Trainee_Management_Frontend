@@ -15,7 +15,7 @@ export const ADMIN_ROUTES: Routes = [
 
     {
         path: 'create-user',
-        loadComponent: () => import('./add-user/add-user.component').then(c => c.AddUserComponent)
+        loadComponent: () => import('../auth/add-user/add-user.component').then(c => c.AddUserComponent)
     },
 
     {
@@ -23,18 +23,18 @@ export const ADMIN_ROUTES: Routes = [
         children: [
             {
                 path: '',
-                loadComponent: () => import('./trainees/trainee-list/view-trainee-list.component').then(c => c.ViewTraineesListComponent)
+                loadComponent: () => import('../trainees/trainee-list/view-trainee-list.component').then(c => c.ViewTraineesListComponent)
             },
             {
                 path: ':id',
                 children: [
                     {
                         path: '',
-                        loadComponent: () => import('./trainees/trainee-details/trainee-details.component').then(c => c.TraineeDetailComponent)
+                        loadComponent: () => import('../trainees/trainee-details/trainee-details.component').then(c => c.TraineeDetailComponent)
                     },
                     {
                         path: 'edit',
-                        loadComponent: () => import('./trainees/edit-trainee/edit-trainee.component').then(c => c.EditUserComponent)
+                        loadComponent: () => import('../trainees/edit-trainee/edit-trainee.component').then(c => c.EditUserComponent)
                     }
                 ],
                 
@@ -47,18 +47,18 @@ export const ADMIN_ROUTES: Routes = [
         children: [
             {
                 path: '',
-                loadComponent: () => import('./mentor/mentor-list/view-mentor-list.component').then(c => c.ViewMentorsListComponent)
+                loadComponent: () => import('../mentors/mentor-list/view-mentor-list.component').then(c => c.ViewMentorsListComponent)
             },
             {
                 path: ':id',
                 children: [
                     {
                         path: '',
-                        loadComponent: () => import('./mentor/mentor-details/mentor-details.component').then(c => c.MentorDetailComponent)
+                        loadComponent: () => import('../mentors/mentor-details/mentor-details.component').then(c => c.MentorDetailComponent)
                     },
                     {
                         path: 'edit',
-                        loadComponent: () => import('./mentor/edit-mentor/edit-mentor.component').then(c => c.EditMentorComponent)
+                        loadComponent: () => import('../mentors/edit-mentor/edit-mentor.component').then(c => c.EditMentorComponent)
                     }
                 ],
                 

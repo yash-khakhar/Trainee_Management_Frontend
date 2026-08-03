@@ -3,9 +3,9 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { RouterModule } from '@angular/router';
 
-import { AdminLayoutComponent } from '../../../../shared/components/layouts/admin-layout/admin-layout.component';
-import { TraineeService } from '../../../trainees/services/trainees.service';
-import { Trainee } from '../../../trainees/models/trainee.model';
+import { AdminLayoutComponent } from '../../../shared/components/layouts/admin-layout/admin-layout.component';
+import { TraineeService } from '../services/trainees.service';
+import { Trainee } from '../models/trainee.model';
 
 @Component({
     selector: 'app-trainee-detail',

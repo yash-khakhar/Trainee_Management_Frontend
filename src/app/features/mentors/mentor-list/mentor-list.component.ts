@@ -4,10 +4,10 @@ import { Router, RouterModule } from '@angular/router';
 import { debounceTime, distinctUntilChanged, switchMap, tap, finalize } from 'rxjs';
 import { toObservable } from '@angular/core/rxjs-interop';
 
-import { DataTableComponent } from '../../../../shared/components/UI/data-table/data-table.component';
-import { MentorStatusEnum } from '../../../mentors/models/mentorstatus.enum';
-import { MentorsService } from '../../../mentors/services/mentors.service';
-import { MentorList } from '../../../mentors/models/mentors-list.model';
+import { DataTableComponent } from '../../../shared/components/UI/data-table/data-table.component';
+import { MentorStatusEnum } from '../models/mentorstatus.enum';
+import { MentorsService } from '../services/mentors.service';
+import { MentorList } from '../models/mentors-list.model';
 
 @Component({
     selector: 'app-mentors-list',

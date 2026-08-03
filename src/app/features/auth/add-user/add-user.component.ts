@@ -1,10 +1,10 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
-import { AuthService } from '../../auth/services/auth.service';
-import { UserRolesEnum } from '../../auth/enums/user-roles.enum';
-import { UserStatusEnum } from '../../auth/enums/user-status.enum';
-import { CreateUserRequest } from '../../auth/models/create-user-request.model';
+import { AuthService } from '../services/auth.service';
+import { UserRolesEnum } from '../enums/user-roles.enum';
+import { UserStatusEnum } from '../enums/user-status.enum';
+import { CreateUserRequest } from '../models/create-user-request.model';
 import { ButtonComponent } from '../../../shared/components/UI/button/button.component';
 import { InputComponent } from '../../../shared/components/UI/text-input/input.component';
 import { AdminLayoutComponent } from '../../../shared/components/layouts/admin-layout/admin-layout.component';

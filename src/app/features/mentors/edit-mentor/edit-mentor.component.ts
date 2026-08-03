@@ -3,14 +3,14 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { finalize } from 'rxjs';
 
-import { UserRolesEnum } from '../../../auth/enums/user-roles.enum';
-import { ButtonComponent } from '../../../../shared/components/UI/button/button.component';
-import { InputComponent } from '../../../../shared/components/UI/text-input/input.component';
-import { AdminLayoutComponent } from '../../../../shared/components/layouts/admin-layout/admin-layout.component';
+import { UserRolesEnum } from '../../auth/enums/user-roles.enum';
+import { ButtonComponent } from '../../../shared/components/UI/button/button.component';
+import { InputComponent } from '../../../shared/components/UI/text-input/input.component';
+import { AdminLayoutComponent } from '../../../shared/components/layouts/admin-layout/admin-layout.component';
 import { CommonModule } from '@angular/common';
-import { MentorsService } from '../../../mentors/services/mentors.service';
-import { MentorStatusEnum } from '../../../mentors/models/mentorstatus.enum';
-import { UpdateMentorRequest } from '../../../mentors/models/update-mentor-request';
+import { MentorsService } from '../services/mentors.service';
+import { MentorStatusEnum } from '../models/mentorstatus.enum';
+import { UpdateMentorRequest } from '../models/update-mentor-request';
 
 @Component({
     selector: 'app-edit-mentor',
