@@ -60,7 +60,7 @@ export class MentorsService{
     }
 
     updateMentor(mentorData: UpdateMentorRequest){
-        return this.http.put<Mentor>(`${this.baseUrl}/`, mentorData).pipe(
+        return this.http.put<Mentor>(`${this.baseUrl}/${mentorData.id}`, mentorData).pipe(
             map((response:Mentor) => response)
         );
     }

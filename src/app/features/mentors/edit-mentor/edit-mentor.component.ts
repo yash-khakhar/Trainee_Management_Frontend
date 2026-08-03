@@ -103,7 +103,7 @@ export class EditMentorComponent implements OnInit {
                 this.successMessage.set('Mentor profile updated successfully!');
             },
             error: (err) => {
-                this.errorMessage.set(err.error?.message || 'Profile update failed. Check inputs.');
+                this.errorMessage.set(err.error?.Message || 'Profile update failed. Check inputs.');
             }
         });
     }
