@@ -1,7 +1,7 @@
 import { inject, Injectable } from "@angular/core";
 import { environment } from "../../../../environments/environment.development";
 import { HttpClient, HttpParams } from "@angular/common/http";
-import { BehaviorSubject, map, Observable, tap } from "rxjs";
+import { Observable } from "rxjs";
 
 import { TraineeList } from "../models/trainee-list.model";
 import { TraineeStatusEnum } from "../models/traineestatus.enum";
@@ -16,9 +16,6 @@ export class TraineeService{
     private readonly baseUrl = `${environment.apiUrl}/Trainee`
 
     private http = inject(HttpClient);
-
-    private traineeListSubject = new BehaviorSubject<TraineeList | null>(null);
-    readonly traineeList$ = this.traineeListSubject.asObservable();
 
     getTrainees(
         pageNumber?: number,
@@ -45,24 +42,16 @@ export class TraineeService{
             params = params.set('status', status);
         }
     
-        return this.http.get<TraineeList>(this.baseUrl, { params }).pipe(
-            tap((response: TraineeList) => {
-                this.traineeListSubject.next(response);
-            })
-        );
+        return this.http.get<TraineeList>(this.baseUrl, { params });
 
     }
 
     getTraineeById(id: number){
-        return this.http.get<Trainee>(`${this.baseUrl}/${id}`).pipe(
-            map((response:Trainee) => response)
-        );
+        return this.http.get<Trainee>(`${this.baseUrl}/${id}`);
     }
 
     updateTrainee(traineeData: UpdateTraineeRequest){
-        return this.http.put<Trainee>(`${this.baseUrl}/`, traineeData).pipe(
-            map((response:Trainee) => response)
-        );
+        return this.http.put<Trainee>(`${this.baseUrl}/`, traineeData);
     }
 
 }

@@ -1,7 +1,7 @@
 import { inject, Injectable } from "@angular/core";
 import { environment } from "../../../../environments/environment.development";
 import { HttpClient, HttpParams } from "@angular/common/http";
-import { BehaviorSubject, map, Observable, tap } from "rxjs";
+import { Observable } from "rxjs";
 
 import { MentorList } from "../models/mentors-list.model";
 import { MentorStatusEnum } from "../models/mentorstatus.enum";
@@ -16,9 +16,6 @@ export class MentorsService{
     private readonly baseUrl = `${environment.apiUrl}/Mentor`
 
     private http = inject(HttpClient);
-
-    private mentorListSubject = new BehaviorSubject<MentorList | null>(null);
-    readonly mentorList$ = this.mentorListSubject.asObservable();
 
     getMentors(
         pageNumber?: number,
@@ -45,24 +42,16 @@ export class MentorsService{
             params = params.set('status', status);
         }
     
-        return this.http.get<MentorList>(this.baseUrl, { params }).pipe(
-            tap((response: MentorList) => {
-                this.mentorListSubject.next(response);
-            })
-        );
+        return this.http.get<MentorList>(this.baseUrl, { params });
 
     }
 
     getMentorById(id: number){
-        return this.http.get<Mentor>(`${this.baseUrl}/${id}`).pipe(
-            map((response:Mentor) => response)
-        );
+        return this.http.get<Mentor>(`${this.baseUrl}/${id}`);
     }
 
     updateMentor(mentorData: UpdateMentorRequest){
-        return this.http.put<Mentor>(`${this.baseUrl}/${mentorData.id}`, mentorData).pipe(
-            map((response:Mentor) => response)
-        );
+        return this.http.put<Mentor>(`${this.baseUrl}/${mentorData.id}`, mentorData);
     }
 
 }

@@ -42,22 +42,24 @@ export class AdminDashboardComponent implements OnInit {
   TraineeStatusEnum = TraineeStatusEnum;
 
   ngOnInit(): void {
-    this.traineeService.traineeList$.subscribe(data => {
-      if (data) {
-        this.traineeData.set(data);
-      }
-    });
     this.fetchTrainees();
   }
 
   fetchTrainees() {
+
     this.isLoadingTrainees.set(true);
+
     this.traineeService.getTrainees(
       this.currentPage(),
       this.pageSize(),
       this.searchQuery(),
       this.selectedStatus()
-    ).pipe(finalize(() => this.isLoadingTrainees.set(false))).subscribe();
+    ).pipe(finalize(() => this.isLoadingTrainees.set(false))).subscribe(data => {
+      if(data){
+        this.traineeData.set(data);
+      }
+    });
+
   }
 
   onSearchChange(event: Event) {

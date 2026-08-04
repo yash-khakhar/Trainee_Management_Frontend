@@ -1,0 +1,128 @@
+<app-admin-layout>
+    <div class="max-w-4xl mx-auto p-8 bg-white rounded-2xl shadow-xl border border-gray-100 transition-all duration-300 w-full">
+
+        <!-- Header Section -->
+        <div class="border-b border-gray-100 pb-5 mb-6 flex justify-between items-center">
+            <div>
+                <h2 class="text-2xl font-extrabold text-gray-900 tracking-tight">
+                    @if (mode() === 'add') { Create Learning Task }
+                    @else if (mode() === 'edit') { Edit Learning Task }
+                    @else { View Learning Task }
+                </h2>
+                <p class="text-sm text-gray-500 mt-1">
+                    @if (mode() === 'view') { Review task details and parameters. }
+                    @else { Fill in the specifications for the learning task. }
+                </p>
+            </div>
+            @if (mode() === 'view') {
+                <span class="px-3 py-1 text-xs font-semibold rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200">
+                    View Mode
+                </span>
+            }
+        </div>
+
+        <!-- Dynamic Error Alert -->
+        @if (errorMessage()) {
+        <div class="mb-6 p-4 rounded-xl bg-red-50 border border-red-200 text-sm font-medium text-red-700 flex items-center gap-2">
+            <svg class="w-5 h-5 flex-shrink-0 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span>{{ errorMessage() }}</span>
+        </div>
+        }
+
+        <!-- Dynamic Success Alert -->
+        @if (successMessage()) {
+        <div class="mb-6 p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-sm font-medium text-emerald-700 flex items-center gap-2">
+            <svg class="w-5 h-5 flex-shrink-0 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            <span>{{ successMessage() }}</span>
+        </div>
+        }
+
+        <!-- Form Section -->
+        <form [formGroup]="taskForm" (ngSubmit)="onSubmit()" class="space-y-6">
+
+            <!-- Section 1: Task Core Info -->
+            <div>
+                <h3 class="text-sm font-bold uppercase tracking-wider text-indigo-600 mb-4">Task Information</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Title Field -->
+                    <app-input id="title" label="Task Title" type="text" placeholder="Enter task title"
+                        [control]="$any(taskForm.controls.title)" errorMessage="Title is required."
+                        formControlName="title"></app-input>
+
+                    <!-- Expected Tech Stack Field -->
+                    <app-input id="expectedTechStack" label="Expected Tech Stack" type="text" placeholder="e.g. Asp.Net, Angular"
+                        [control]="$any(taskForm.controls.expectedTechStack)" errorMessage="Tech Stack is required."
+                        formControlName="expectedTechStack"></app-input>
+                </div>
+            </div>
+
+            <!-- Section 2: Description & Execution Details -->
+            <div class="pt-2">
+                <h3 class="text-sm font-bold uppercase tracking-wider text-indigo-600 mb-4">Execution Details</h3>
+                <div class="grid grid-cols-1 gap-4">
+                    <!-- Description Field -->
+                    <div class="flex flex-col gap-1.5">
+                        <label for="description" class="text-sm font-semibold text-gray-700">Description</label>
+                        <textarea id="description" formControlName="description" rows="4" placeholder="Enter detailed description..."
+                            class="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 disabled:bg-gray-50 disabled:text-gray-500"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 3: Timeline & Status -->
+            <div class="pt-2">
+                <h3 class="text-sm font-bold uppercase tracking-wider text-indigo-600 mb-4">Timeline & Status</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    
+                    <!-- Due Date Field -->
+                    <app-input id="dueDate" label="Due Date" type="date"
+                        [control]="$any(taskForm.controls.dueDate)" errorMessage="Due date is required."
+                        formControlName="dueDate"></app-input>
+
+                    <!-- Status Dropdown Selector Field -->
+                    <div class="flex flex-col gap-1.5">
+                        <label for="status" class="text-sm font-semibold text-gray-700">Status</label>
+                        <div class="relative">
+                            <select id="status" formControlName="status"
+                                class="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 appearance-none cursor-pointer disabled:bg-gray-50 disabled:text-gray-500">
+                                @for (s of statuses; track s.value) {
+                                <option [value]="s.value">{{ s.label }}</option>
+                                }
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
+                                <svg class="fill-current h-4 w-4" viewBox="0 0 20 20">
+                                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Metadata for View Mode -->
+            @if (mode() === 'view' && createdAt()) {
+                <div class="pt-4 border-t border-gray-100 grid grid-cols-2 gap-4 text-xs text-gray-500">
+                    <div><span class="font-semibold">Created At:</span> {{ createdAt() | date:'medium' }}</div>
+                    <div><span class="font-semibold">Updated At:</span> {{ updatedAt() | date:'medium' }}</div>
+                </div>
+            }
+
+            <!-- Submit Action Footer -->
+            @if (mode() !== 'view') {
+                <div class="pt-6 border-t border-gray-100 flex items-center justify-end">
+                    <app-button
+                        customClass="py-3 px-8 font-semibold rounded-xl shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition duration-200 flex justify-center items-center gap-2 disabled:cursor-not-allowed disabled:shadow-none bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 text-white focus:ring-indigo-500"
+                        type="submit" [disabled]="taskForm.invalid" [isLoading]="isLoading()"
+                        [loadingText]="mode() === 'edit' ? 'Updating Task...' : 'Creating Task...'" [fullWidth]="false">
+                        @if (mode() === 'edit') { Update Task } @else { Create Task }
+                    </app-button>
+                </div>
+            }
+        </form>
+    </div>
+</app-admin-layout>
