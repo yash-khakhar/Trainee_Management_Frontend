@@ -85,8 +85,9 @@ export class AdminDashboardComponent implements OnInit {
     return Math.ceil(totalRecords / pageSize) || 1;
   }
 
-  openAddTaskModal() { }
+  openAddTaskModal() { this.router.navigate(['/admin/learning-tasks/add']); }
   openAddUserModal() { this.router.navigate(['/admin/create-user']); }
-  openAssignTaskModal() { }
+  openAssignTaskModal() { this.router.navigate(['/admin/task-assignment/add']); }
   openAssignMentorModal() { }
+  
 }

@@ -11,6 +11,7 @@ import { AdminLayoutComponent } from '../../../shared/components/layouts/admin-l
 import { TraineeStatusEnum } from '../models/traineestatus.enum';
 import { CommonModule } from '@angular/common';
 import { UpdateTraineeRequest } from '../models/update-trainee-request';
+import { NotificationService } from '../../../shared/services/NotificationService.service';
 
 @Component({
     selector: 'app-edit-trainee',
@@ -22,12 +23,11 @@ export class EditUserComponent implements OnInit {
 
     private fb = inject(FormBuilder);
     private traineeService = inject(TraineeService);
+    private notificationService = inject(NotificationService);
     private route = inject(ActivatedRoute);
 
     isLoading = signal<boolean>(false);
     isFetching = signal<boolean>(true);
-    errorMessage = signal<string | null>(null);
-    successMessage = signal<string | null>(null);
     userId!: number;
 
     status = [
@@ -74,7 +74,7 @@ export class EditUserComponent implements OnInit {
             },
             error: (err) => {
                 this.isFetching.set(false);
-                this.errorMessage.set('Failed to load trainee profile data.');
+                this.notificationService.error(err.error?.Message || 'Failed to load trainee profile data.');
             }
         });
     }
@@ -86,8 +86,6 @@ export class EditUserComponent implements OnInit {
         }
 
         this.isLoading.set(true);
-        this.errorMessage.set(null);
-        this.successMessage.set(null); 
 
         const formValues = this.editForm.getRawValue();
 
@@ -100,10 +98,10 @@ export class EditUserComponent implements OnInit {
             finalize(() => this.isLoading.set(false))
         ).subscribe({
             next: () => {
-                this.successMessage.set('Trainee profile updated successfully!');
+                this.notificationService.success('Trainee profile updated successfully!');
             },
             error: (err) => {
-                this.errorMessage.set(err.error?.message || 'Profile update failed. Check inputs.');
+                this.notificationService.error(err.error?.Message || 'Profile update failed. Check inputs.');
             }
         });
     }

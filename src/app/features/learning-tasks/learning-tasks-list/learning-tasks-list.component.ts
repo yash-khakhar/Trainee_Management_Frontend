@@ -3,6 +3,7 @@ import { RouterLink } from '@angular/router';
 import { CommonModule, DatePipe } from '@angular/common';
 
 import { LearningTaskService } from '../services/learning-tasks.service';
+import { NotificationService } from '../../../shared/services/NotificationService.service';
 import { LearningTaskResponse } from '../models/learning-task-response.model';
 import { AdminLayoutComponent } from '../../../shared/components/layouts/admin-layout/admin-layout.component';
 
@@ -15,10 +16,10 @@ import { AdminLayoutComponent } from '../../../shared/components/layouts/admin-l
 export class LearningTaskListComponent implements OnInit {
 
     private taskService = inject(LearningTaskService);
+    private notificationService = inject(NotificationService);
 
     tasks = signal<LearningTaskResponse[]>([]);
     isLoading = signal<boolean>(false);
-    errorMessage = signal<string | null>(null);
 
     ngOnInit(): void {
         this.loadTasks();
@@ -32,7 +33,7 @@ export class LearningTaskListComponent implements OnInit {
                 this.isLoading.set(false);
             },
             error: (err) => {
-                this.errorMessage.set(err.error?.Message || 'Failed to load tasks.');
+                this.notificationService.error(err.error?.Message || 'Failed to load tasks.');
                 this.isLoading.set(false);
             }
         });

@@ -11,7 +11,7 @@ export const authGuard: CanActivateFn = (route: ActivatedRouteSnapshot) => {
     const user = authService.currentUser;
 
     if(!user){
-        return router.createUrlTree(['/login']);
+        return router.createUrlTree(['/']);
     }
 
     const allowedRoles = route.data['roles'] as UserRolesEnum[];
@@ -24,6 +24,6 @@ export const authGuard: CanActivateFn = (route: ActivatedRouteSnapshot) => {
         return true;
     }
 
-    return router.createUrlTree(['/unauthorized']);
+    return router.createUrlTree(['/not-found']);
 
 }

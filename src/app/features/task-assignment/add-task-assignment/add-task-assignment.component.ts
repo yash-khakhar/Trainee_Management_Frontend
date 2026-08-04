@@ -4,6 +4,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TaskAssignmentService } from '../services/task-assignment.service';
 import { LearningTaskResponse } from '../../learning-tasks/models/learning-task-response.model';
 import { LearningTaskService } from '../../learning-tasks/services/learning-tasks.service';
+import { NotificationService } from '../../../shared/services/NotificationService.service';
 
 import { Mentor } from '../../mentors/models/mentors.model';
 import { MentorsService } from '../../mentors/services/mentors.service';
@@ -36,12 +37,11 @@ export class AddTaskAssignmentComponent implements OnInit {
     private fb = inject(FormBuilder);
     private traineeService = inject(TraineeService);
     private mentorService = inject(MentorsService);
+    private notificationService = inject(NotificationService);
     private learningTaskService = inject(LearningTaskService);
     private taskAssignmentService = inject(TaskAssignmentService);
 
     isLoading = signal<boolean>(false);
-    errorMessage = signal<string | null>(null);
-    successMessage = signal<string | null>(null);
 
     rawTrainees = signal<Trainee[]>([]);
     rawMentors = signal<Mentor[]>([]);
@@ -97,7 +97,7 @@ export class AddTaskAssignmentComponent implements OnInit {
                 const list = res.data || [];
                 this.rawTrainees.set(list);
             },
-            error: () => this.errorMessage.set('Failed to load trainees.')
+            error: () => this.notificationService.error('Failed to load trainees.')
         });
 
         this.mentorService.getMentors().subscribe({
@@ -105,27 +105,25 @@ export class AddTaskAssignmentComponent implements OnInit {
                 const list = res.data || [];
                 this.rawMentors.set(list);
             },
-            error: () => this.errorMessage.set('Failed to load mentors.')
+            error: () => this.notificationService.error('Failed to load mentors.')
         });
 
         this.learningTaskService.getAllTasks().subscribe({
             next: (res) => {
                 this.rawTasks.set(res);
             },
-            error: () => this.errorMessage.set('Failed to load tasks.')
+            error: () => this.notificationService.error('Failed to load tasks.')
         });
     }
 
     onSubmit(): void {
-        
+
         if (this.assignmentForm.invalid) {
             this.assignmentForm.markAllAsTouched();
             return;
         }
 
         this.isLoading.set(true);
-        this.errorMessage.set(null);
-        this.successMessage.set(null);
 
         const formValues = this.assignmentForm.getRawValue();
         const payload: CreateTaskAssignmentRequest = {
@@ -140,7 +138,7 @@ export class AddTaskAssignmentComponent implements OnInit {
         this.taskAssignmentService.createTaskAssignment(payload).subscribe({
             next: () => {
                 this.isLoading.set(false);
-                this.successMessage.set('Task assigned successfully!');
+                this.notificationService.success('Task assigned successfully!');
                 this.assignmentForm.reset({
                     traineeId: 0,
                     mentorId: 0,
@@ -150,7 +148,7 @@ export class AddTaskAssignmentComponent implements OnInit {
             },
             error: (err) => {
                 this.isLoading.set(false);
-                this.errorMessage.set(err.error?.Message || 'Operation failed. Please check inputs.');
+                this.notificationService.error(err.error?.Message || 'Operation failed. Please check inputs.');
             }
         });
     }

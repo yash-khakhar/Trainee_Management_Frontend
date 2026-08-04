@@ -13,13 +13,6 @@
             </a>
         </div>
 
-        <!-- Error Alert -->
-        @if (errorMessage()) {
-        <div class="mb-6 p-4 rounded-xl bg-red-50 border border-red-200 text-sm font-medium text-red-700">
-            {{ errorMessage() }}
-        </div>
-        }
-
         <!-- Loading State -->
         @if (isLoading()) {
         <div class="text-center py-10 text-gray-500 font-medium">Loading tasks...</div>

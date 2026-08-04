@@ -8,6 +8,7 @@ import { DataTableComponent } from '../../../shared/components/UI/data-table/dat
 import { MentorStatusEnum } from '../models/mentorstatus.enum';
 import { MentorsService } from '../services/mentors.service';
 import { MentorList } from '../models/mentors-list.model';
+import { NotificationService } from '../../../shared/services/NotificationService.service';
 
 @Component({
     selector: 'app-mentors-list',
@@ -19,6 +20,7 @@ export class MentorsListComponent {
 
     private mentorService = inject(MentorsService);
     private router = inject(Router);
+    private notificationService = inject(NotificationService);
 
     MentorStatusEnum = MentorStatusEnum;
 
@@ -56,7 +58,7 @@ export class MentorsListComponent {
                 }
             },
             error: (err) => {
-                
+                this.notificationService.error(err.error?.Message || 'Unexpected Error: Failed to load mentors');
             }
         });
     }
@@ -95,7 +97,7 @@ export class MentorsListComponent {
                 }
             },
             error: (err) => {
-                
+                this.notificationService.error(err.error?.Message || 'Unexpected Error: Failed to load mentors');
             }
         });
     }

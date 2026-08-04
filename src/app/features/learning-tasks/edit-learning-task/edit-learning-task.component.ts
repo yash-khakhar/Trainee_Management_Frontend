@@ -8,6 +8,7 @@ import { UpsertLearningTaskRequest } from '../models/upsert-learning-task-reques
 import { ButtonComponent } from '../../../shared/components/UI/button/button.component';
 import { InputComponent } from '../../../shared/components/UI/text-input/input.component';
 import { AdminLayoutComponent } from '../../../shared/components/layouts/admin-layout/admin-layout.component';
+import { NotificationService } from '../../../shared/services/NotificationService.service';
 
 @Component({
     selector: 'app-learning-task-edit',
@@ -19,14 +20,13 @@ export class LearningTaskEditComponent implements OnInit {
 
     private fb = inject(FormBuilder);
     private taskService = inject(LearningTaskService);
+    private notificationService = inject(NotificationService)
     private route = inject(ActivatedRoute);
 
     taskId!: number;
 
     isLoading = signal<boolean>(false);
     isFetching = signal<boolean>(false);
-    errorMessage = signal<string | null>(null);
-    successMessage = signal<string | null>(null);
 
     statuses = [
         { label: 'DRAFT', value: TaskStatusEnum.Draft },
@@ -65,20 +65,19 @@ export class LearningTaskEditComponent implements OnInit {
             },
             error: (err) => {
                 this.isFetching.set(false);
-                this.errorMessage.set(err.error?.Message || 'Failed to load task details.');
+                this.notificationService.error(err.error?.Message || 'Failed to load task details.');
             }
         });
     }
 
     onSubmit(): void {
+
         if (this.taskForm.invalid) {
             this.taskForm.markAllAsTouched();
             return;
         }
 
         this.isLoading.set(true);
-        this.errorMessage.set(null);
-        this.successMessage.set(null);
 
         const formValues = this.taskForm.getRawValue();
         const payload: UpsertLearningTaskRequest = {
@@ -94,11 +93,11 @@ export class LearningTaskEditComponent implements OnInit {
         this.taskService.updateTask(id, payload).subscribe({
             next: () => {
                 this.isLoading.set(false);
-                this.successMessage.set('Learning Task updated successfully!');
+                this.notificationService.success('Learning Task updated successfully!');
             },
             error: (err) => {
                 this.isLoading.set(false);
-                this.errorMessage.set(err.error?.Message || 'Operation failed. Please check inputs.');
+                this.notificationService.error(err.error?.Message || 'Operation failed. Please check inputs.');
             }
         });
     }

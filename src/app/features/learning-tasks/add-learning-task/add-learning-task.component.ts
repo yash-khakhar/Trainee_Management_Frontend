@@ -7,6 +7,7 @@ import { UpsertLearningTaskRequest } from '../models/upsert-learning-task-reques
 import { ButtonComponent } from '../../../shared/components/UI/button/button.component';
 import { InputComponent } from '../../../shared/components/UI/text-input/input.component';
 import { AdminLayoutComponent } from '../../../shared/components/layouts/admin-layout/admin-layout.component';
+import { NotificationService } from '../../../shared/services/NotificationService.service';
 
 @Component({
     selector: 'app-learning-task-create',
@@ -18,10 +19,9 @@ export class LearningTaskCreateComponent {
 
     private fb = inject(FormBuilder);
     private taskService = inject(LearningTaskService);
+    private notificationService = inject(NotificationService);
 
     isLoading = signal<boolean>(false);
-    errorMessage = signal<string | null>(null);
-    successMessage = signal<string | null>(null);
 
     statuses = [
         { label: 'Draft', value: TaskStatusEnum.Draft },
@@ -44,8 +44,6 @@ export class LearningTaskCreateComponent {
         }
 
         this.isLoading.set(true);
-        this.errorMessage.set(null);
-        this.successMessage.set(null);
 
         const formValues = this.taskForm.getRawValue();
         const payload: UpsertLearningTaskRequest = {
@@ -59,12 +57,12 @@ export class LearningTaskCreateComponent {
         this.taskService.createTask(payload).subscribe({
             next: () => {
                 this.isLoading.set(false);
-                this.successMessage.set('Learning Task created successfully!');
+                this.notificationService.success('Learning Task created successfully!');
                 this.taskForm.reset({ status: TaskStatusEnum.Draft });
             },
             error: (err) => {
                 this.isLoading.set(false);
-                this.errorMessage.set(err.error?.Message || 'Operation failed. Please check inputs.');
+                this.notificationService.error(err.error?.Message || 'Operation failed. Please check inputs.');
             }
         });
     }

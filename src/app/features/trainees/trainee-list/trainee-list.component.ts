@@ -8,6 +8,7 @@ import { DataTableComponent } from '../../../shared/components/UI/data-table/dat
 import { TraineeStatusEnum } from '../models/traineestatus.enum';
 import { TraineeService } from '../services/trainees.service';
 import { TraineeList } from '../models/trainee-list.model';
+import { NotificationService } from '../../../shared/services/NotificationService.service';
 
 @Component({
     selector: 'app-trainees-list',
@@ -18,6 +19,7 @@ import { TraineeList } from '../models/trainee-list.model';
 export class TraineesListComponent {
 
     private traineeService = inject(TraineeService);
+    private notificationService = inject(NotificationService);
     private router = inject(Router);
 
     TraineeStatusEnum = TraineeStatusEnum;
@@ -91,6 +93,7 @@ export class TraineesListComponent {
                 }
             },
             error: (err) => {
+                this.notificationService.error(err?.error?.Message || 'Unexpected Error: Failed to load trainee data');
             }
         });
     }

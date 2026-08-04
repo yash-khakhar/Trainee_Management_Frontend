@@ -11,6 +11,7 @@ import { CommonModule } from '@angular/common';
 import { MentorsService } from '../services/mentors.service';
 import { MentorStatusEnum } from '../models/mentorstatus.enum';
 import { UpdateMentorRequest } from '../models/update-mentor-request';
+import { NotificationService } from '../../../shared/services/NotificationService.service';
 
 @Component({
     selector: 'app-edit-mentor',
@@ -23,11 +24,10 @@ export class EditMentorComponent implements OnInit {
     private fb = inject(FormBuilder);
     private mentorService = inject(MentorsService);
     private route = inject(ActivatedRoute);
+    private notificationService = inject(NotificationService);
 
     isLoading = signal<boolean>(false);
     isFetching = signal<boolean>(true);
-    errorMessage = signal<string | null>(null);
-    successMessage = signal<string | null>(null);
     userId!: number;
 
     status = [
@@ -74,7 +74,7 @@ export class EditMentorComponent implements OnInit {
             },
             error: (err) => {
                 this.isFetching.set(false);
-                this.errorMessage.set('Failed to load mentor profile data.');
+                this.notificationService.error('Failed to load mentor profile data.');
             }
         });
     }
@@ -86,8 +86,6 @@ export class EditMentorComponent implements OnInit {
         }
 
         this.isLoading.set(true);
-        this.errorMessage.set(null);
-        this.successMessage.set(null); 
 
         const formValues = this.editForm.getRawValue();
 
@@ -100,10 +98,10 @@ export class EditMentorComponent implements OnInit {
             finalize(() => this.isLoading.set(false))
         ).subscribe({
             next: () => {
-                this.successMessage.set('Mentor profile updated successfully!');
+                this.notificationService.success('Mentor profile updated successfully!');
             },
             error: (err) => {
-                this.errorMessage.set(err.error?.Message || 'Profile update failed. Check inputs.');
+                this.notificationService.error(err.error?.Message || 'Profile update failed. Check inputs.');
             }
         });
     }

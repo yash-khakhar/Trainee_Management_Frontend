@@ -15,6 +15,7 @@ import { UpdateTaskAssignmentRequest } from '../models/update-task-assignment.mo
 import { TaskAssignmentStatusEnum } from '../models/task-assignment-status.enum';
 
 import { AdminLayoutComponent } from '../../../shared/components/layouts/admin-layout/admin-layout.component';
+import { NotificationService } from '../../../shared/services/NotificationService.service';
 
 @Component({
     selector: 'app-view-task-assignments',
@@ -28,10 +29,9 @@ export class ViewTaskAssignmentsComponent implements OnInit {
     private traineeService = inject(TraineeService);
     private mentorService = inject(MentorsService);
     private learningTaskService = inject(LearningTaskService);
+    private notificationService = inject(NotificationService);
 
     isLoading = signal<boolean>(true);
-    errorMessage = signal<string | null>(null);
-    successMessage = signal<string | null>(null);
 
     assignments = signal<TaskAssignmentResponse[]>([]);
     traineesMap = new Map<number, string>();
@@ -59,7 +59,7 @@ export class ViewTaskAssignmentsComponent implements OnInit {
         ]).then(() => {
             this.fetchAssignments();
         }).catch(() => {
-            this.errorMessage.set('Failed to load lookup context data.');
+            this.notificationService.error('Failed to load lookup context data.');
             this.isLoading.set(false);
         });
     }
@@ -109,7 +109,7 @@ export class ViewTaskAssignmentsComponent implements OnInit {
                 this.isLoading.set(false);
             },
             error: (err) => {
-                this.errorMessage.set(err.error?.Message || 'Failed to load task assignments.');
+                this.notificationService.error(err.error?.Message || 'Failed to load task assignments.');
                 this.isLoading.set(false);
             }
         });
@@ -123,19 +123,15 @@ export class ViewTaskAssignmentsComponent implements OnInit {
             status: typedStatus
         };
 
-        this.errorMessage.set(null);
-        this.successMessage.set(null);
-
         this.taskAssignmentService.updateTaskAssignment(assignment.id, payload).subscribe({
             next: (updated) => {
-                // Update local signal array to reflect change instantly
                 this.assignments.update(list =>
                     list.map(item => item.id === assignment.id ? { ...item, status: updated.status || typedStatus } : item)
                 );
-                this.successMessage.set(`Status updated successfully for Assignment #${assignment.id}`);
+                this.notificationService.success(`Status updated successfully for Assignment #${assignment.id}`);
             },
             error: (err) => {
-                this.errorMessage.set(err.error?.Message || 'Failed to update assignment status.');
+                this.notificationService.error(err.error?.Message || 'Failed to update assignment status.');
             }
         });
     }
