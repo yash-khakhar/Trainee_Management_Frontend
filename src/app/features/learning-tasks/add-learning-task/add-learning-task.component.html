@@ -4,21 +4,9 @@
         <!-- Header Section -->
         <div class="border-b border-gray-100 pb-5 mb-6 flex justify-between items-center">
             <div>
-                <h2 class="text-2xl font-extrabold text-gray-900 tracking-tight">
-                    @if (mode() === 'add') { Create Learning Task }
-                    @else if (mode() === 'edit') { Edit Learning Task }
-                    @else { View Learning Task }
-                </h2>
-                <p class="text-sm text-gray-500 mt-1">
-                    @if (mode() === 'view') { Review task details and parameters. }
-                    @else { Fill in the specifications for the learning task. }
-                </p>
+                <h2 class="text-2xl font-extrabold text-gray-900 tracking-tight">Create Learning Task</h2>
+                <p class="text-sm text-gray-500 mt-1">Fill in the specifications for the new learning task.</p>
             </div>
-            @if (mode() === 'view') {
-                <span class="px-3 py-1 text-xs font-semibold rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200">
-                    View Mode
-                </span>
-            }
         </div>
 
         <!-- Dynamic Error Alert -->
@@ -50,12 +38,12 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <!-- Title Field -->
                     <app-input id="title" label="Task Title" type="text" placeholder="Enter task title"
-                        [control]="$any(taskForm.controls.title)" errorMessage="Title is required."
+                        errorMessage="Title is required."
                         formControlName="title"></app-input>
 
                     <!-- Expected Tech Stack Field -->
                     <app-input id="expectedTechStack" label="Expected Tech Stack" type="text" placeholder="e.g. Asp.Net, Angular"
-                        [control]="$any(taskForm.controls.expectedTechStack)" errorMessage="Tech Stack is required."
+                        errorMessage="Tech Stack is required."
                         formControlName="expectedTechStack"></app-input>
                 </div>
             </div>
@@ -68,7 +56,7 @@
                     <div class="flex flex-col gap-1.5">
                         <label for="description" class="text-sm font-semibold text-gray-700">Description</label>
                         <textarea id="description" formControlName="description" rows="4" placeholder="Enter detailed description..."
-                            class="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 disabled:bg-gray-50 disabled:text-gray-500"></textarea>
+                            class="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200"></textarea>
                     </div>
                 </div>
             </div>
@@ -80,7 +68,7 @@
                     
                     <!-- Due Date Field -->
                     <app-input id="dueDate" label="Due Date" type="date"
-                        [control]="$any(taskForm.controls.dueDate)" errorMessage="Due date is required."
+                        errorMessage="Due date is required."
                         formControlName="dueDate"></app-input>
 
                     <!-- Status Dropdown Selector Field -->
@@ -88,7 +76,7 @@
                         <label for="status" class="text-sm font-semibold text-gray-700">Status</label>
                         <div class="relative">
                             <select id="status" formControlName="status"
-                                class="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 appearance-none cursor-pointer disabled:bg-gray-50 disabled:text-gray-500">
+                                class="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 appearance-none cursor-pointer">
                                 @for (s of statuses; track s.value) {
                                 <option [value]="s.value">{{ s.label }}</option>
                                 }
@@ -104,25 +92,15 @@
                 </div>
             </div>
 
-            <!-- Metadata for View Mode -->
-            @if (mode() === 'view' && createdAt()) {
-                <div class="pt-4 border-t border-gray-100 grid grid-cols-2 gap-4 text-xs text-gray-500">
-                    <div><span class="font-semibold">Created At:</span> {{ createdAt() | date:'medium' }}</div>
-                    <div><span class="font-semibold">Updated At:</span> {{ updatedAt() | date:'medium' }}</div>
-                </div>
-            }
-
             <!-- Submit Action Footer -->
-            @if (mode() !== 'view') {
-                <div class="pt-6 border-t border-gray-100 flex items-center justify-end">
-                    <app-button
-                        customClass="py-3 px-8 font-semibold rounded-xl shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition duration-200 flex justify-center items-center gap-2 disabled:cursor-not-allowed disabled:shadow-none bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 text-white focus:ring-indigo-500"
-                        type="submit" [disabled]="taskForm.invalid" [isLoading]="isLoading()"
-                        [loadingText]="mode() === 'edit' ? 'Updating Task...' : 'Creating Task...'" [fullWidth]="false">
-                        @if (mode() === 'edit') { Update Task } @else { Create Task }
-                    </app-button>
-                </div>
-            }
+            <div class="pt-6 border-t border-gray-100 flex items-center justify-end">
+                <app-button
+                    customClass="py-3 px-8 font-semibold rounded-xl shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition duration-200 flex justify-center items-center gap-2 disabled:cursor-not-allowed disabled:shadow-none bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 text-white focus:ring-indigo-500"
+                    type="submit" [disabled]="taskForm.invalid" [isLoading]="isLoading()"
+                    loadingText="Creating Task..." [fullWidth]="false">
+                    Create Task
+                </app-button>
+            </div>
         </form>
     </div>
 </app-admin-layout>

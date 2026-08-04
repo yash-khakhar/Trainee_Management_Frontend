@@ -7,7 +7,7 @@
                 <h2 class="text-2xl font-extrabold text-gray-900 tracking-tight">Learning Tasks</h2>
                 <p class="text-sm text-gray-500 mt-1">Manage, view, and track all available learning tasks.</p>
             </div>
-            <a routerLink="/learning-tasks/add"
+            <a routerLink="/admin/learning-tasks/add"
                 class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl shadow-md transition duration-200">
                 + Add New Task
             </a>
@@ -34,31 +34,25 @@
                         <th class="p-4">Tech Stack</th>
                         <th class="p-4">Status</th>
                         <th class="p-4">Due Date</th>
-                        <th class="p-4 text-right rounded-r-xl">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100 text-sm">
                     @for (task of tasks(); track task.id) {
-                    <tr class="hover:bg-gray-50/50 transition duration-150">
+                    <tr [routerLink]="['/admin/learning-tasks', task.id, 'edit']"
+                        class="hover:bg-gray-50/50 transition duration-150 cursor-pointer">
                         <td class="p-4 font-semibold text-gray-900">{{ task.title }}</td>
                         <td class="p-4 text-gray-600">{{ task.expectedTechStack }}</td>
                         <td class="p-4">
                             <span class="px-3 py-1 text-xs font-semibold rounded-full"
-                                [class.bg-emerald-50]="task.status === 'Published'"
-                                [class.text-emerald-700]="task.status === 'Published'"
-                                [class.bg-amber-50]="task.status === 'Draft'"
-                                [class.text-amber-700]="task.status === 'Draft'">
+                                [class.bg-emerald-50]="task.status === 'PUBLISHED'"
+                                [class.text-emerald-700]="task.status === 'PUBLISHED'"
+                                [class.bg-amber-50]="task.status === 'DRAFT'"
+                                [class.text-amber-700]="task.status === 'DRAFT'">
                                 {{ task.status }}
                             </span>
                         </td>
                         <td class="p-4 text-gray-600">{{ task.dueDate | date:'mediumDate' }}</td>
-                        <td class="p-4 text-right space-x-2">
-                            <a [routerLink]="['/learning-tasks/view', task.id]"
-                                class="text-indigo-600 hover:text-indigo-800 font-medium">View</a>
-                            <a [routerLink]="['/learning-tasks/edit', task.id]"
-                                class="text-blue-600 hover:text-blue-800 font-medium">Edit</a>
-                        </td>
-                    </tr> <!-- Added missing closing tr tag -->
+                    </tr>
                     } @empty {
                     <tr>
                         <td colspan="5" class="text-center py-8 text-gray-400">No learning tasks found.</td>

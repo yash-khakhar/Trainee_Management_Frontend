@@ -1,5 +1,5 @@
 export enum TaskStatusEnum {
-    Draft = 'Draft',
-    Published = 'Published',
-    Archived = 'Archived'
+    Draft = 'DRAFT',
+    Published = 'PUBLISHED',
+    Archived = 'ARCHIEVED'
 }

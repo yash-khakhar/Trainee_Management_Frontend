@@ -1,42 +1,37 @@
-import { Component, OnInit, inject, input, signal } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { DatePipe } from '@angular/common';
 
-import { LearningTaskService } from './services/learning-tasks.service';
-import { TaskStatusEnum } from './models/taskstatus.enum';
-import { UpsertLearningTaskRequest } from './models/upsert-learning-task-request.model';
-import { ButtonComponent } from '../../shared/components/UI/button/button.component';
-import { InputComponent } from '../../shared/components/UI/text-input/input.component';
-import { AdminLayoutComponent } from '../../shared/components/layouts/admin-layout/admin-layout.component';
+import { LearningTaskService } from '../services/learning-tasks.service';
+import { TaskStatusEnum } from '../models/taskstatus.enum';
+import { UpsertLearningTaskRequest } from '../models/upsert-learning-task-request.model';
+import { ButtonComponent } from '../../../shared/components/UI/button/button.component';
+import { InputComponent } from '../../../shared/components/UI/text-input/input.component';
+import { AdminLayoutComponent } from '../../../shared/components/layouts/admin-layout/admin-layout.component';
 
 @Component({
-    selector: 'app-learning-task',
+    selector: 'app-learning-task-edit',
     standalone: true,
-    imports: [ReactiveFormsModule, ButtonComponent, InputComponent, AdminLayoutComponent, DatePipe],
-    templateUrl: './learning-tasks.component.html'
+    imports: [ReactiveFormsModule, ButtonComponent, InputComponent, AdminLayoutComponent],
+    templateUrl: './edit-learning-task.component.html'
 })
-export class LearningTaskComponent implements OnInit {
+export class LearningTaskEditComponent implements OnInit {
 
     private fb = inject(FormBuilder);
     private taskService = inject(LearningTaskService);
     private route = inject(ActivatedRoute);
 
-    mode = input<'add' | 'edit' | 'view'>('add');
-    taskId = input<number | null>(null);
+    taskId!: number;
 
     isLoading = signal<boolean>(false);
     isFetching = signal<boolean>(false);
     errorMessage = signal<string | null>(null);
     successMessage = signal<string | null>(null);
 
-    createdAt = signal<string | null>(null);
-    updatedAt = signal<string | null>(null);
-
     statuses = [
-        { label: 'Draft', value: TaskStatusEnum.Draft },
-        { label: 'Published', value: TaskStatusEnum.Published },
-        { label: 'Archived', value: TaskStatusEnum.Archived }
+        { label: 'DRAFT', value: TaskStatusEnum.Draft },
+        { label: 'PUBLISHED', value: TaskStatusEnum.Published },
+        { label: 'ARCHIEVED', value: TaskStatusEnum.Archived }
     ];
 
     taskForm = this.fb.nonNullable.group({
@@ -48,22 +43,14 @@ export class LearningTaskComponent implements OnInit {
     });
 
     ngOnInit(): void {
-        
-        const currentMode = this.mode();
-        const id = this.taskId() || Number(this.route.snapshot.paramMap.get('id'));
-
-        if ((currentMode === 'edit' || currentMode === 'view') && id) {
-            this.fetchTaskDetails(id);
+        const idParam = this.route.snapshot.paramMap.get('id');
+        if (idParam) {
+            this.taskId = Number(idParam);
+            this.fetchTaskDetails(this.taskId);
         }
-
-        if (currentMode === 'view') {
-            this.taskForm.disable();
-        }
-
     }
 
     fetchTaskDetails(id: number): void {
-
         this.isFetching.set(true);
         this.taskService.getTaskById(id).subscribe({
             next: (task) => {
@@ -75,21 +62,15 @@ export class LearningTaskComponent implements OnInit {
                     dueDate: task.dueDate ? task.dueDate.split('T')[0] : '',
                     status: task.status
                 });
-                this.createdAt.set(task.createdAt);
-                this.updatedAt.set(task.updatedAt);
             },
             error: (err) => {
                 this.isFetching.set(false);
                 this.errorMessage.set(err.error?.Message || 'Failed to load task details.');
             }
         });
-
     }
 
     onSubmit(): void {
-
-        if (this.mode() === 'view') return;
-
         if (this.taskForm.invalid) {
             this.taskForm.markAllAsTouched();
             return;
@@ -108,21 +89,12 @@ export class LearningTaskComponent implements OnInit {
             status: formValues.status
         };
 
-        const currentMode = this.mode();
-        const id = this.taskId() || Number(this.route.snapshot.paramMap.get('id'));
+        const id = this.taskId || Number(this.route.snapshot.paramMap.get('id'));
 
-        const request$ = currentMode === 'edit' && id
-            ? this.taskService.updateTask(id, payload)
-            : this.taskService.createTask(payload);
-
-        request$.subscribe({
+        this.taskService.updateTask(id, payload).subscribe({
             next: () => {
                 this.isLoading.set(false);
-                const actionText = currentMode === 'edit' ? 'updated' : 'created';
-                this.successMessage.set(`Learning Task ${actionText} successfully!`);
-                if (currentMode === 'add') {
-                    this.taskForm.reset({ status: TaskStatusEnum.Draft });
-                }
+                this.successMessage.set('Learning Task updated successfully!');
             },
             error: (err) => {
                 this.isLoading.set(false);
@@ -130,4 +102,5 @@ export class LearningTaskComponent implements OnInit {
             }
         });
     }
+    
 }

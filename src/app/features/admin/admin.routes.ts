@@ -74,19 +74,20 @@ export const ADMIN_ROUTES: Routes = [
                 loadComponent: () => import('../learning-tasks/learning-tasks-list/learning-tasks-list.component').then(c => c.LearningTaskListComponent)
             },
             {
+                path: 'add',
+                loadComponent: () => import('../learning-tasks/add-learning-task/add-learning-task.component').then(c => c.LearningTaskCreateComponent)
+            },
+            {
                 path: ':id',
                 children: [
-                    {
-                        path: '',
-                        loadComponent: () => import('../mentors/mentor-details/mentor-details.component').then(c => c.MentorDetailComponent)
-                    },
+                    
                     {
                         path: 'edit',
-                        loadComponent: () => import('../mentors/edit-mentor/edit-mentor.component').then(c => c.EditMentorComponent)
+                        loadComponent: () => import('../learning-tasks/edit-learning-task/edit-learning-task.component').then(c => c.LearningTaskEditComponent)
                     }
                 ],
                 
-            }
+            },
         ]
     },
 
