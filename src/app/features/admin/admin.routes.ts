@@ -92,6 +92,21 @@ export const ADMIN_ROUTES: Routes = [
     },
 
     {
+        path: 'task-assignment',
+        children: [
+            {
+                path: '',
+                loadComponent: () => import('../task-assignment/view-task-assignment/view-task-assignment.component').then(c => c.ViewTaskAssignmentsComponent)
+
+            },
+            {
+                path: 'add',
+                loadComponent: () => import('../task-assignment/add-task-assignment/add-task-assignment.component').then(c => c.AddTaskAssignmentComponent)
+            }
+        ]
+    },
+
+    {
         path: '**',
         loadComponent: () => import('./not-found/not-found.component').then(c => c.NotFoundComponent)
     }
