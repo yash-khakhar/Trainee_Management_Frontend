@@ -47,7 +47,6 @@ export class AuthService {
         return this.http.get<User>(`${this.baseUrl}/me`
         ).pipe(
             tap(user => {
-                console.log("initizalie auth:" + user)
                 this.userSubject.next(user)
             }),
             catchError(() => {
