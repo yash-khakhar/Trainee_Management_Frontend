@@ -73,9 +73,10 @@ export class AddTaskAssignmentComponent implements OnInit {
 
     statuses = [
         { label: 'Assigned', value: TaskAssignmentStatusEnum.Assigned },
-        { label: 'In Progress', value: TaskAssignmentStatusEnum.InProgress },
-        { label: 'Completed', value: TaskAssignmentStatusEnum.Completed },
-        { label: 'Cancelled', value: TaskAssignmentStatusEnum.Cancelled }
+        { label: 'In Progess', value: TaskAssignmentStatusEnum.InProgess },
+        { label: 'Submitted', value: TaskAssignmentStatusEnum.Submitted },
+        { label: 'Reviewed', value: TaskAssignmentStatusEnum.Reviewed },
+        { label: 'Completed', value: TaskAssignmentStatusEnum.Completed }
     ];
 
     assignmentForm = this.fb.nonNullable.group({

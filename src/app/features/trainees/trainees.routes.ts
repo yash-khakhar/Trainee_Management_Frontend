@@ -20,4 +20,13 @@ export const TRAINEES_ROUTES: Routes = [
         loadComponent: () => import('./dashboard/dashboard.component').then(m => m.DashboardComponent)
     },
 
+    {
+        path: 'task-assignment/:id',
+        canActivate: [authGuard],
+        data: {
+            roles: [UserRolesEnum.TRAINEE]
+        },
+        loadComponent: () => import('../task-assignment/task-assignment-detail/task-assignment-detail.component').then(m => m.TaskAssignmentDetailComponent)
+    },
+
 ];

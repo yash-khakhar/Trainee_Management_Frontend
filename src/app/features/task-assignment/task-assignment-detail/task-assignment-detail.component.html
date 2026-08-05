@@ -1,0 +1,127 @@
+<div class="max-w-4xl mx-auto p-8 bg-white rounded-2xl shadow-xl border border-gray-100 mt-6 mb-12">
+
+    <!-- Back Link -->
+    <div class="mb-6">
+        <a routerLink="/trainees/dashboard"
+            class="text-sm font-semibold text-indigo-600 hover:text-indigo-800 flex items-center gap-1">
+            &larr; Back to Dashboard
+        </a>
+    </div>
+
+    <!-- Loading State -->
+    @if (isLoading()) {
+    <div class="flex justify-center items-center py-12">
+        <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-600"></div>
+    </div>
+    } @else if (assignment()) {
+    <!-- Task Details Card -->
+    <div class="bg-gray-50 rounded-2xl p-6 border border-gray-200 mb-8">
+        <div class="flex justify-between items-start gap-4 mb-4">
+            <div>
+                <span
+                    class="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-md bg-indigo-100 text-indigo-800">
+                    {{ assignment()?.task?.expectedTechStack || 'Task' }}
+                </span>
+                <h1 class="text-2xl font-extrabold text-gray-900 mt-2">{{ assignment()?.task?.title }}</h1>
+            </div>
+            <span class="px-3 py-1 text-xs font-semibold rounded-full"
+                [class.bg-blue-100]="assignment()?.status === 'ASSIGNED'"
+                [class.text-blue-800]="assignment()?.status === 'ASSIGNED'"
+                [class.bg-amber-100]="assignment()?.status === 'INPROGRESS'"
+                [class.text-amber-800]="assignment()?.status === 'INPROGRESS'"
+                [class.bg-amber-100]="assignment()?.status === 'SUBMITTED'"
+                [class.text-amber-800]="assignment()?.status === 'SUBMITTED'"
+                [class.bg-amber-100]="assignment()?.status === 'REVIEWED'"
+                [class.text-amber-800]="assignment()?.status === 'REVIEWED'"
+                [class.bg-emerald-100]="assignment()?.status === 'COMPLETED'"
+                [class.text-emerald-800]="assignment()?.status === 'COMPLETED'">
+                {{ assignment()?.status }}
+            </span>
+        </div>
+
+        <p class="text-gray-600 text-sm mb-6 leading-relaxed">
+            {{ assignment()?.task?.description }}
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t border-gray-200 text-sm">
+            <div>
+                <span class="block text-gray-400 font-medium">Assigned Mentor</span>
+                <span class="font-semibold text-gray-800">
+                    {{ assignment()?.mentor?.firstName }} {{ assignment()?.mentor?.lastName }}
+                </span>
+            </div>
+            <div>
+                <span class="block text-gray-400 font-medium">Due Date</span>
+                <span class="font-semibold text-gray-800">
+                    {{ assignment()?.dueDate ? (assignment()?.dueDate | date:'mediumDate') : 'N/A' }}
+                </span>
+            </div>
+            <div>
+                <span class="block text-gray-400 font-medium">Mentor Remarks</span>
+                <span class="font-semibold text-gray-800">{{ assignment()?.remarks || 'None' }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Submission Form Section -->
+    <!-- Submission Form Section or Completed State -->
+        @if (assignment()?.status === 'COMPLETED' || assignment()?.status === 'REVIEWED' || assignment()?.status === 'SUBMITTED') {
+            <div class="bg-emerald-50 rounded-2xl p-6 border border-emerald-200 shadow-sm text-center">
+                <div class="flex flex-col items-center justify-center gap-2">
+                    <svg class="w-10 h-10 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <h3 class="text-lg font-bold text-emerald-900">Task Completed</h3>
+                    <p class="text-sm text-emerald-700 max-w-md">This task assignment has been successfully completed and
+                        approved. Further submissions are disabled.</p>
+                </div>
+            </div>
+        } @else {
+            <div class="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
+                <h3 class="text-lg font-bold text-gray-900 mb-4">Submit Your Work</h3>
+
+                <form #subForm="ngForm" (ngSubmit)="onSubmitWork(subForm)">
+                    <!-- Submission URL -->
+                    <div class="mb-4">
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">GitHub / Code URL</label>
+                        <input type="url" name="submissionUrl" [(ngModel)]="submissionUrl" required #urlRef="ngModel"
+                            placeholder="https://github.com/username/repository"
+                            class="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none text-sm" />
+                        @if (urlRef.invalid && (urlRef.dirty || urlRef.touched || subForm.submitted)) {
+                        <p class="text-xs text-red-600 mt-1 font-medium">GitHub / Code URL is required.</p>
+                        }
+                    </div>
+
+                    <!-- Notes -->
+                    <div class="mb-4">
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Notes / Comments</label>
+                        <textarea name="notes" [(ngModel)]="notes" rows="3" required #notesRef="ngModel"
+                            placeholder="Provide details about your implementation..."
+                            class="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none text-sm"></textarea>
+                        @if (notesRef.invalid && (notesRef.dirty || notesRef.touched || subForm.submitted)) {
+                        <p class="text-xs text-red-600 mt-1 font-medium">Notes / Comments are required.</p>
+                        }
+                    </div>
+
+                    <!-- File Upload -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Attach Files (.pdf, .doc, .txt)</label>
+                        <input type="file" (change)="onFilesSelected($event)" multiple
+                            class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer" />
+                        @if (isFileRequiredError) {
+                        <p class="text-xs text-red-600 mt-1 font-medium">At least one file attachment is required.</p>
+                        }
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" [disabled]="subForm.invalid || selectedFiles.length === 0 || isSubmitting()"
+                        class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-semibold rounded-xl shadow-md transition duration-200">
+                        @if (isSubmitting()) { Submitting... } @else { Submit Assignment }
+                    </button>
+                </form>
+            </div>
+        }
+
+    }
+</div>

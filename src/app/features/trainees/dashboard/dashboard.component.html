@@ -34,7 +34,11 @@
                 </thead>
                 <tbody class="divide-y divide-gray-200 bg-white">
                     @for (assignment of assignments(); track assignment.id) {
-                    <tr class="hover:bg-gray-50/50 transition duration-150">
+                    <!-- Inside the @for loop tr tag -->
+                    <tr 
+                        [routerLink]="['/trainees/task-assignment', assignment.id]" 
+                        class="hover:bg-gray-50/50 transition duration-150 cursor-pointer"
+                    >
                         <!-- Task Title -->
                         <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">
                             {{ assignment.task?.title || 'N/A' }}
@@ -56,12 +60,14 @@
                             <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full"
                                 [class.bg-blue-100]="assignment.status === 'ASSIGNED'"
                                 [class.text-blue-800]="assignment.status === 'ASSIGNED'"
-                                [class.bg-amber-100]="assignment.status === 'IN_PROGRESS'"
-                                [class.text-amber-800]="assignment.status === 'IN_PROGRESS'"
+                                [class.bg-amber-100]="assignment.status === 'INPROGRESS'"
+                                [class.text-amber-800]="assignment.status === 'INPROGRESS'"
+                                [class.bg-amber-100]="assignment.status === 'SUBMITTED'"
+                                [class.text-amber-800]="assignment.status === 'SUBMITTED'"
+                                [class.bg-amber-100]="assignment.status === 'REVIEWED'"
+                                [class.text-amber-800]="assignment.status === 'REVIEWED'"
                                 [class.bg-emerald-100]="assignment.status === 'COMPLETED'"
-                                [class.text-emerald-800]="assignment.status === 'COMPLETED'"
-                                [class.bg-red-100]="assignment.status === 'CANCELLED'"
-                                [class.text-red-800]="assignment.status === 'CANCELLED'">
+                                [class.text-emerald-800]="assignment.status === 'COMPLETED'">
                                 {{ assignment.status }}
                             </span>
                         </td>

@@ -20,8 +20,8 @@ export class TaskAssignmentService {
         return this.http.get<TaskAssignmentResponse[]>(this.baseUrl);
     }
 
-    getTaskAssignmentById(id: number): Observable<TaskAssignmentResponse> {
-        return this.http.get<TaskAssignmentResponse>(`${this.baseUrl}/${id}`);
+    getTaskAssignmentById(id: number): Observable<DetailedTaskAssignmentResponse> {
+        return this.http.get<DetailedTaskAssignmentResponse>(`${this.baseUrl}/${id}`);
     }
 
     createTaskAssignment(payload: CreateTaskAssignmentRequest): Observable<TaskAssignmentResponse> {

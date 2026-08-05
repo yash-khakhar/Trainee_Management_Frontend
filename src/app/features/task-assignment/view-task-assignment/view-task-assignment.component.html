@@ -1,11 +1,13 @@
 <app-admin-layout>
-    <div class="max-w-7xl mx-auto p-8 bg-white rounded-2xl shadow-xl border border-gray-100 transition-all duration-300 w-full">
+    <div
+        class="max-w-7xl mx-auto p-8 bg-white rounded-2xl shadow-xl border border-gray-100 transition-all duration-300 w-full">
 
         <!-- Header Section -->
         <div class="border-b border-gray-100 pb-5 mb-6 flex justify-between items-center">
             <div>
                 <h2 class="text-2xl font-extrabold text-gray-900 tracking-tight">Task Assignments Overview</h2>
-                <p class="text-sm text-gray-500 mt-1">View active task mappings between trainees, mentors, and tasks.</p>
+                <p class="text-sm text-gray-500 mt-1">View active task mappings between trainees, mentors, and tasks.
+                </p>
             </div>
             <a routerLink="/admin/task-assignment/add"
                 class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl shadow-md transition duration-200">
@@ -19,68 +21,66 @@
             <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-600"></div>
         </div>
         } @else {
-            <!-- Data Table / Grid Section -->
-            @if (assignments().length === 0) {
-            <div class="text-center py-12 bg-gray-50 rounded-xl border border-dashed border-gray-200">
-                <p class="text-gray-500 font-medium">No task assignments found.</p>
-            </div>
-            } @else {
-            <div class="overflow-x-auto rounded-xl border border-gray-200">
-                <table class="min-w-full divide-y divide-gray-200 text-left text-sm">
-                    <thead class="bg-gray-50">
-                        <tr>
-                            <th class="px-6 py-3 font-semibold text-gray-700 uppercase tracking-wider">Task</th>
-                            <th class="px-6 py-3 font-semibold text-gray-700 uppercase tracking-wider">Trainee</th>
-                            <th class="px-6 py-3 font-semibold text-gray-700 uppercase tracking-wider">Mentor</th>
-                            <th class="px-6 py-3 font-semibold text-gray-700 uppercase tracking-wider">Assigned Date</th>
-                            <th class="px-6 py-3 font-semibold text-gray-700 uppercase tracking-wider">Due Date</th>
-                            <th class="px-6 py-3 font-semibold text-gray-700 uppercase tracking-wider">Status Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-200 bg-white">
-                        @for (assignment of assignments(); track assignment.id) {
-                        <tr class="hover:bg-gray-50/50 transition duration-150">
-                            <!-- Task Info -->
-                            <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">
-                                {{ getTaskTitle(assignment.taskId) }}
-                            </td>
-                            <!-- Trainee Info -->
-                            <td class="px-6 py-4 whitespace-nowrap text-gray-600">
-                                {{ getTraineeName(assignment.traineeId) }}
-                            </td>
-                            <!-- Mentor Info -->
-                            <td class="px-6 py-4 whitespace-nowrap text-gray-600">
-                                {{ getMentorName(assignment.mentorId) }}
-                            </td>
-                            <!-- Assigned Date -->
-                            <td class="px-6 py-4 whitespace-nowrap text-gray-600">
-                                {{ assignment.assignedDate | date:'mediumDate' }}
-                            </td>
-                            <!-- Due Date -->
-                            <td class="px-6 py-4 whitespace-nowrap text-gray-600">
-                                {{ assignment.dueDate ? (assignment.dueDate | date:'mediumDate') : 'N/A' }}
-                            </td>
-                            <!-- Interactive Status Change Dropdown -->
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <select 
-                                    [value]="assignment.status"
-                                    (change)="onStatusChange(assignment, $any($event.target).value)"
-                                    class="px-3 py-1.5 text-xs font-semibold rounded-lg border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer"
-                                    [class.text-blue-700]="assignment.status === 'ASSIGNED'"
-                                    [class.text-amber-700]="assignment.status === 'IN_PROGRESS'"
-                                    [class.text-emerald-700]="assignment.status === 'COMPLETED'"
-                                    [class.text-red-700]="assignment.status === 'CANCELLED'">
-                                    @for (s of statuses; track s.value) {
-                                    <option [value]="s.value">{{ s.label }}</option>
-                                    }
-                                </select>
-                            </td>
-                        </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-            }
+        <!-- Data Table / Grid Section -->
+        @if (assignments().length === 0) {
+        <div class="text-center py-12 bg-gray-50 rounded-xl border border-dashed border-gray-200">
+            <p class="text-gray-500 font-medium">No task assignments found.</p>
+        </div>
+        } @else {
+        <div class="overflow-x-auto rounded-xl border border-gray-200">
+            <table class="min-w-full divide-y divide-gray-200 text-left text-sm">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 font-semibold text-gray-700 uppercase tracking-wider">Task</th>
+                        <th class="px-6 py-3 font-semibold text-gray-700 uppercase tracking-wider">Trainee</th>
+                        <th class="px-6 py-3 font-semibold text-gray-700 uppercase tracking-wider">Mentor</th>
+                        <th class="px-6 py-3 font-semibold text-gray-700 uppercase tracking-wider">Assigned Date</th>
+                        <th class="px-6 py-3 font-semibold text-gray-700 uppercase tracking-wider">Due Date</th>
+                        <th class="px-6 py-3 font-semibold text-gray-700 uppercase tracking-wider">Status Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200 bg-white">
+                    @for (assignment of assignments(); track assignment.id) {
+                    <tr class="hover:bg-gray-50/50 transition duration-150">
+                        <!-- Task Info -->
+                        <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">
+                            {{ getTaskTitle(assignment.taskId) }}
+                        </td>
+                        <!-- Trainee Info -->
+                        <td class="px-6 py-4 whitespace-nowrap text-gray-600">
+                            {{ getTraineeName(assignment.traineeId) }}
+                        </td>
+                        <!-- Mentor Info -->
+                        <td class="px-6 py-4 whitespace-nowrap text-gray-600">
+                            {{ getMentorName(assignment.mentorId) }}
+                        </td>
+                        <!-- Assigned Date -->
+                        <td class="px-6 py-4 whitespace-nowrap text-gray-600">
+                            {{ assignment.assignedDate | date:'mediumDate' }}
+                        </td>
+                        <!-- Due Date -->
+                        <td class="px-6 py-4 whitespace-nowrap text-gray-600">
+                            {{ assignment.dueDate ? (assignment.dueDate | date:'mediumDate') : 'N/A' }}
+                        </td>
+                        <!-- Interactive Status Change Dropdown -->
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <select [value]="assignment.status"
+                                (change)="onStatusChange(assignment, $any($event.target).value)"
+                                class="px-3 py-1.5 text-xs font-semibold rounded-lg border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer"
+                                [class.text-blue-700]="assignment.status === 'ASSIGNED'"
+                                [class.text-amber-700]="assignment.status === 'INPROGRESS'"
+                                [class.text-emerald-700]="assignment.status === 'SUBMITTED' || assignment.status === 'REVIEWED' || assignment.status === 'COMPLETED'">
+                                @for (s of statuses; track s.value) {
+                                <option [value]="s.value" [selected]="s.value === assignment.status">{{ s.label }}</option>
+                                }
+                            </select>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        }
         }
     </div>
 </app-admin-layout>

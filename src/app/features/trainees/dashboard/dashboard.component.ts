@@ -1,5 +1,6 @@
 import { Component, OnInit, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
 import { AuthService } from '../../auth/services/auth.service';
 import { TaskAssignmentService } from '../../task-assignment/services/task-assignment.service';
@@ -11,7 +12,7 @@ import { DetailedTaskAssignmentResponse } from '../../task-assignment/models/det
 @Component({
   selector: 'trainee-app-dashboard',
   templateUrl: './dashboard.component.html',
-  imports: [CommonModule]
+  imports: [CommonModule, RouterLink]
 })
 export class DashboardComponent implements OnInit {
 
