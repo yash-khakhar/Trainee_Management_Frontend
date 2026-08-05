@@ -1,14 +1,12 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-interface TraineeTask {
-  id: string;
-  traineeName: string;
-  email: string;
-  taskTitle: string;
-  deadline: string;
-  status: 'Pending' | 'In Progress' | 'Completed';
-}
+import { AuthService } from '../../auth/services/auth.service';
+import { TaskAssignmentService } from '../../task-assignment/services/task-assignment.service';
+import { NotificationService } from '../../../shared/services/NotificationService.service';
+
+import { DetailedTaskAssignmentResponse } from '../../task-assignment/models/detailed-task-assignment-response';
+
 
 @Component({
   selector: 'trainee-app-dashboard',
@@ -17,48 +15,40 @@ interface TraineeTask {
 })
 export class DashboardComponent implements OnInit {
 
-  traineeTasks = signal<TraineeTask[]>([
-    {
-      id: '1',
-      traineeName: 'Alice Smith',
-      email: 'alice.smith@example.com',
-      taskTitle: 'Build Angular Landing Page with Tailwind',
-      deadline: '2026-08-10',
-      status: 'In Progress'
-    },
-    {
-      id: '2',
-      traineeName: 'Bob Jones',
-      email: 'bob.jones@example.com',
-      taskTitle: 'Implement .NET Core API Endpoints',
-      deadline: '2026-08-05',
-      status: 'Pending'
-    },
-    {
-      id: '3',
-      traineeName: 'Charlie Brown',
-      email: 'charlie.brown@example.com',
-      taskTitle: 'Setup Entity Framework Core DB Context',
-      deadline: '2026-07-28',
-      status: 'Completed'
-    },
-    {
-      id: '4',
-      traineeName: 'Diana Prince',
-      email: 'diana.prince@example.com',
-      taskTitle: 'Configure Angular Route Guards and SSR',
-      deadline: '2026-08-15',
-      status: 'Pending'
-    }
-  ]);
+  private taskAssignmentService = inject(TaskAssignmentService);
+  private authService = inject(AuthService);
+  private notificationService = inject(NotificationService);
 
-  isLoading = signal<boolean>(false);
+  isLoading = signal<boolean>(true);
+
+  assignments = signal<DetailedTaskAssignmentResponse[]>([]);
 
   ngOnInit(): void {
-    this.fetchDashboardData();
+    this.loadDashboardData();
   }
 
-  private fetchDashboardData(): void {
+  loadDashboardData(): void {
+
+    const currentUser = this.authService.currentUser;
+    const traineeId = currentUser?.id;
+
+    if (!traineeId) {
+      this.notificationService.error('Unable to identify current user session.')
+      this.isLoading.set(false);
+      return;
+    }
+
+    this.taskAssignmentService.getTaskAssignmentsByTraineeId(traineeId).subscribe({
+      next: (res) => {
+        this.assignments.set(res);
+        this.isLoading.set(false);
+      },
+      error: (err) => {
+        this.notificationService.error(err.error?.Message || 'Failed to load your assigned tasks.')
+        this.isLoading.set(false);
+      }
+    });
 
   }
+
 }

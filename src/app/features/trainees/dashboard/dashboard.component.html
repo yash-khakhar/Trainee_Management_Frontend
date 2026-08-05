@@ -1,67 +1,79 @@
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <div class="mb-8">
-        <h1 class="text-2xl font-bold text-gray-900">Dashboard</h1>
-        <p class="mt-1 text-sm text-gray-600">Overview of trainees and their assigned tasks with deadlines.</p>
+<div class="max-w-7xl mx-auto p-8 bg-white rounded-2xl shadow-xl border border-gray-100 transition-all duration-300 w-full mt-6">
+
+    <!-- Header Section -->
+    <div class="border-b border-gray-100 pb-5 mb-6 flex justify-between items-center">
+        <div>
+            <h2 class="text-2xl font-extrabold text-gray-900 tracking-tight">My Task Assignments</h2>
+            <p class="text-sm text-gray-500 mt-1">Review learning tasks assigned to you along with timelines, mentors, and remarks.</p>
+        </div>
     </div>
 
     <!-- Loading State -->
     @if (isLoading()) {
     <div class="flex justify-center items-center py-12">
-        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
+        <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-600"></div>
     </div>
     } @else {
-    <!-- Data Table -->
-    <div class="bg-white shadow-sm border border-gray-200 rounded-lg overflow-hidden">
-        <table class="min-w-full divide-y divide-gray-200">
-            <thead class="bg-gray-50">
-                <tr>
-                    <th scope="col"
-                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Trainee
-                    </th>
-                    <th scope="col"
-                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Task
-                        Assigned</th>
-                    <th scope="col"
-                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Deadline
-                    </th>
-                    <th scope="col"
-                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status
-                    </th>
-                </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
-                @for (item of traineeTasks(); track item.id) {
-                <tr class="hover:bg-gray-50 transition-colors">
-                
-                <td class="px-6 py-4 whitespace-nowrap">
-                    <div class="text-sm font-medium text-gray-900">{{ item.traineeName }}</div>
-                    <div class="text-sm text-gray-500">{{ item.email }}</div>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {{ item.taskTitle }}
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {{ item.deadline | date:'mediumDate' }}
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full" [ngClass]="{
-                        'bg-yellow-100 text-yellow-800': item.status === 'Pending',
-                        'bg-blue-100 text-blue-800': item.status === 'In Progress',
-                        'bg-green-100 text-green-800': item.status === 'Completed'
-                      }">
-                        {{ item.status }}
-                    </span>
-                </td>
-                </tr>
-                } @empty {
-                <tr>
-                    <td colspan="4" class="px-6 py-8 text-center text-sm text-gray-500">
-                        No trainee tasks found.
-                    </td>
-                </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+        <!-- Data Table / Grid Section -->
+        @if (assignments().length === 0) {
+        <div class="text-center py-12 bg-gray-50 rounded-xl border border-dashed border-gray-200">
+            <p class="text-gray-500 font-medium">You currently have no task assignments.</p>
+        </div>
+        } @else {
+        <div class="overflow-x-auto rounded-xl border border-gray-200">
+            <table class="min-w-full divide-y divide-gray-200 text-left text-sm">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 font-semibold text-gray-700 uppercase tracking-wider">Task</th>
+                        <th class="px-6 py-3 font-semibold text-gray-700 uppercase tracking-wider">Mentor</th>
+                        <th class="px-6 py-3 font-semibold text-gray-700 uppercase tracking-wider">Assigned Date</th>
+                        <th class="px-6 py-3 font-semibold text-gray-700 uppercase tracking-wider">Due Date</th>
+                        <th class="px-6 py-3 font-semibold text-gray-700 uppercase tracking-wider">Status</th>
+                        <th class="px-6 py-3 font-semibold text-gray-700 uppercase tracking-wider">Remarks</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200 bg-white">
+                    @for (assignment of assignments(); track assignment.id) {
+                    <tr class="hover:bg-gray-50/50 transition duration-150">
+                        <!-- Task Title -->
+                        <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">
+                            {{ assignment.task?.title || 'N/A' }}
+                        </td>
+                        <!-- Mentor Name -->
+                        <td class="px-6 py-4 whitespace-nowrap text-gray-600">
+                            {{ assignment.mentor ? (assignment.mentor.firstName + ' ' + assignment.mentor.lastName) : 'N/A' }}
+                        </td>
+                        <!-- Assigned Date -->
+                        <td class="px-6 py-4 whitespace-nowrap text-gray-600">
+                            {{ assignment.assignedDate | date:'mediumDate' }}
+                        </td>
+                        <!-- Due Date -->
+                        <td class="px-6 py-4 whitespace-nowrap text-gray-600">
+                            {{ assignment.dueDate ? (assignment.dueDate | date:'mediumDate') : 'N/A' }}
+                        </td>
+                        <!-- Status Badge -->
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full"
+                                [class.bg-blue-100]="assignment.status === 'ASSIGNED'"
+                                [class.text-blue-800]="assignment.status === 'ASSIGNED'"
+                                [class.bg-amber-100]="assignment.status === 'IN_PROGRESS'"
+                                [class.text-amber-800]="assignment.status === 'IN_PROGRESS'"
+                                [class.bg-emerald-100]="assignment.status === 'COMPLETED'"
+                                [class.text-emerald-800]="assignment.status === 'COMPLETED'"
+                                [class.bg-red-100]="assignment.status === 'CANCELLED'"
+                                [class.text-red-800]="assignment.status === 'CANCELLED'">
+                                {{ assignment.status }}
+                            </span>
+                        </td>
+                        <!-- Remarks -->
+                        <td class="px-6 py-4 text-gray-600 max-w-xs truncate">
+                            {{ assignment.remarks || 'None' }}
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        }
     }
 </div>

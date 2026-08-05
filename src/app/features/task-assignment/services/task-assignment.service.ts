@@ -6,6 +6,7 @@ import { environment } from '../../../../environments/environment.development';
 import { CreateTaskAssignmentRequest } from '../models/create-task-assignment.model';
 import { TaskAssignmentResponse } from '../models/task-assignment-response.model';
 import { UpdateTaskAssignmentRequest } from '../models/update-task-assignment.model';
+import { DetailedTaskAssignmentResponse } from '../models/detailed-task-assignment-response';
 
 @Injectable({
     providedIn: 'root'
@@ -29,5 +30,9 @@ export class TaskAssignmentService {
 
     updateTaskAssignment(id: number, payload: UpdateTaskAssignmentRequest): Observable<TaskAssignmentResponse> {
         return this.http.put<TaskAssignmentResponse>(`${this.baseUrl}/${id}`, payload);
+    }
+
+    getTaskAssignmentsByTraineeId(traineeId: number): Observable<DetailedTaskAssignmentResponse[]> {
+        return this.http.get<DetailedTaskAssignmentResponse[]>(`${this.baseUrl}/trainee/${1}`);
     }
 }
