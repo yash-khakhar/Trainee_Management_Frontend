@@ -28,6 +28,17 @@ export class LoginComponent {
         password: ['', [Validators.required]]
     });
 
+    constructor(){
+        const user = this.authService.currentUser;
+        if(user !== null){
+            if(user.role === UserRolesEnum.ADMIN){
+                this.router.navigate(['/admin']);    
+            } else{
+                this.router.navigate(['/trainees']);
+            }
+        }
+    }
+
     onSubmit(): void {
 
         if (this.loginForm.invalid) {

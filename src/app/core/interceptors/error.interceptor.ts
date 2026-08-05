@@ -19,7 +19,6 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
         catchError((error: HttpErrorResponse) => {
 
             let errorPayload: ApiErrorResponse;
-            console.log(error)
 
             if (error.error && typeof error.error === 'object' && 'Message' in error.error) {
                 errorPayload = error.error as ApiErrorResponse;
@@ -37,24 +36,29 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 
             switch (errorPayload.StatusCode) {
                 case 401:
+                    errorPayload.ErrorType = 'Login Failed'
                     console.warn('[Global Error] Unauthorized:', errorPayload.Message);
                     break;
 
                 case 403:
+                    errorPayload.ErrorType = 'Forbidden Access'
                     console.warn('[Global Error] Forbidden:', errorPayload.Message);
                     router.navigate(['/forbidden']);
                     break;
 
                 case 404:
+                    errorPayload.ErrorType = 'Not Fouund'
                     console.warn('[Global Error] Not Found:', errorPayload.Message);
                     break;
 
                 case 400:
+                    errorPayload.ErrorType = 'Bad Request'
                     console.warn(`[Global Error] ${errorPayload.ErrorType}:`, errorPayload.Message);
                     break;
 
                 case 500:
                 default:
+                    errorPayload.ErrorType = 'Server Error'
                     console.error(`[Global Error] Server Failure (${errorPayload.StatusCode}):`, errorPayload.Message);
                     break;
             }
