@@ -7,7 +7,7 @@ import { UserStatusEnum } from '../enums/user-status.enum';
 import { CreateUserRequest } from '../models/create-user-request.model';
 import { ButtonComponent } from '../../../shared/components/UI/button/button.component';
 import { InputComponent } from '../../../shared/components/UI/text-input/input.component';
-import { AdminLayoutComponent } from '../../../shared/components/layouts/admin-layout/admin-layout.component';
+import { AdminLayoutComponent } from '../../admin/admin-layout/admin-layout.component';
 import { NotificationService } from '../../../shared/services/NotificationService.service';
 
 @Component({

@@ -14,7 +14,7 @@ import { TaskAssignmentResponse } from '../models/task-assignment-response.model
 import { UpdateTaskAssignmentRequest } from '../models/update-task-assignment.model';
 import { TaskAssignmentStatusEnum } from '../models/task-assignment-status.enum';
 
-import { AdminLayoutComponent } from '../../../shared/components/layouts/admin-layout/admin-layout.component';
+import { AdminLayoutComponent } from '../../admin/admin-layout/admin-layout.component';
 import { NotificationService } from '../../../shared/services/NotificationService.service';
 
 @Component({

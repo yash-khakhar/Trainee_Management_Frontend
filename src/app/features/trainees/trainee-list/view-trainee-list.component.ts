@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 import { TraineesListComponent } from './trainee-list.component';
-import { AdminLayoutComponent } from '../../../shared/components/layouts/admin-layout/admin-layout.component';
+import { AdminLayoutComponent } from '../../admin/admin-layout/admin-layout.component';
 
 @Component({
     selector: 'view-app-trainees-list',

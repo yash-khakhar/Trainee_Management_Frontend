@@ -5,7 +5,7 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { LearningTaskService } from '../services/learning-tasks.service';
 import { NotificationService } from '../../../shared/services/NotificationService.service';
 import { LearningTaskResponse } from '../models/learning-task-response.model';
-import { AdminLayoutComponent } from '../../../shared/components/layouts/admin-layout/admin-layout.component';
+import { AdminLayoutComponent } from '../../admin/admin-layout/admin-layout.component';
 
 @Component({
     selector: 'app-learning-task-list',

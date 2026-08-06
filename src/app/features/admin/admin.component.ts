@@ -7,7 +7,7 @@ import { TraineeService } from '../trainees/services/trainees.service';
 import { TraineeStatusEnum } from '../trainees/models/traineestatus.enum';
 import { TraineeList } from '../trainees/models/trainee-list.model';
 import { ButtonComponent } from '../../shared/components/UI/button/button.component';
-import { AdminLayoutComponent } from '../../shared/components/layouts/admin-layout/admin-layout.component';
+import { AdminLayoutComponent } from './admin-layout/admin-layout.component';
 import { TraineesListComponent } from '../trainees/trainee-list/trainee-list.component';
 
 interface Assignment {
@@ -89,5 +89,5 @@ export class AdminDashboardComponent implements OnInit {
   openAddUserModal() { this.router.navigate(['/admin/create-user']); }
   openAssignTaskModal() { this.router.navigate(['/admin/task-assignment/add']); }
   openAssignMentorModal() { }
-  
+
 }

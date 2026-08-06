@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { ButtonComponent } from '../../../shared/components/UI/button/button.component';
-import { AdminLayoutComponent } from '../../../shared/components/layouts/admin-layout/admin-layout.component';
+import { AdminLayoutComponent } from '../admin-layout/admin-layout.component';
 
 @Component({
     selector: 'app-admin-not-found',

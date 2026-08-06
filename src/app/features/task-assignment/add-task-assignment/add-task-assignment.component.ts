@@ -15,7 +15,7 @@ import { TaskAssignmentStatusEnum } from '../models/task-assignment-status.enum'
 
 import { ButtonComponent } from '../../../shared/components/UI/button/button.component';
 import { InputComponent } from '../../../shared/components/UI/text-input/input.component';
-import { AdminLayoutComponent } from '../../../shared/components/layouts/admin-layout/admin-layout.component';
+import { AdminLayoutComponent } from '../../admin/admin-layout/admin-layout.component';
 import { SearchableDropdownComponent, DropdownOption } from '../../../shared/components/UI/searchable-dropdown/searchable-dropdown.component';
 import { TraineeList } from '../../trainees/models/trainee-list.model';
 import { MentorList } from '../../mentors/models/mentors-list.model';
