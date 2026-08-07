@@ -33,6 +33,6 @@ export class TaskAssignmentService {
     }
 
     getTaskAssignmentsByTraineeId(traineeId: number): Observable<DetailedTaskAssignmentResponse[]> {
-        return this.http.get<DetailedTaskAssignmentResponse[]>(`${this.baseUrl}/trainee/${1}`);
+        return this.http.get<DetailedTaskAssignmentResponse[]>(`${this.baseUrl}/trainee/${traineeId}`);
     }
 }

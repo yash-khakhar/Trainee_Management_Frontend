@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
 import { UserRolesEnum } from './features/auth/enums/user-roles.enum';
+import { TraineeLayoutComponent } from './features/trainees/trainee-layout/trainee-layout.component';
 
 export const routes: Routes = [
 
@@ -17,6 +18,7 @@ export const routes: Routes = [
 
     {
         path: 'trainees',
+        component: TraineeLayoutComponent,
         loadChildren: () => import('./features/trainees/trainees.routes').then(r => r.TRAINEES_ROUTES)
     },
 

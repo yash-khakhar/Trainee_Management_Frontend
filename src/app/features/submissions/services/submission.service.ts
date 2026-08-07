@@ -1,9 +1,10 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 
 import { SubmissionResponse } from '../models/SubmissionResponse.model';
 import { environment } from '../../../../environments/environment.development';
+import { SubmissionFileResponse } from '../models/SubmissionFileResponse.model';
 
 
 @Injectable({
@@ -27,7 +28,7 @@ export class SubmissionService {
         formData.append('taskAssignmentId', taskAssignmentId.toString());
         formData.append('submissionUrl', submissionUrl);
         formData.append('notes', notes);
-        formData.append('submissionDate', submissionDate);
+        formData.append('submittedDate', submissionDate);
         formData.append('status', status);
 
         if (files && files.length > 0) {
@@ -36,7 +37,24 @@ export class SubmissionService {
             });
         }
 
+        console.log(formData);
+
         return this.http.post<SubmissionResponse>(this.baseUrl, formData);
         
+    }
+
+    getSubmissionsByTaskAssignment(taskAssignmentId: number): Observable<SubmissionResponse[]> {
+        return this.http.get<SubmissionResponse[]>(`${this.baseUrl}/task-assignment/${taskAssignmentId}`)
+        .pipe(map(submissions => submissions.sort((a,b) => b.id - a.id)));
+    }
+
+    getSubmissionFilesBySubmissionId(submissionId: number): Observable<SubmissionFileResponse[]> {
+        return this.http.get<SubmissionFileResponse[]>(`${this.baseUrl}/view-submission-files/${submissionId}`);
+    }
+
+    downloadSubmissionFile(fileId: number): Observable<Blob> {
+        return this.http.get(`${this.baseUrl}/submission-files/${fileId}`, {
+            responseType: 'blob'
+        });
     }
 }
