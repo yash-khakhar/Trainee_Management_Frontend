@@ -32,7 +32,11 @@ export class TaskAssignmentService {
         return this.http.put<TaskAssignmentResponse>(`${this.baseUrl}/${id}`, payload);
     }
 
-    getTaskAssignmentsByTraineeId(traineeId: number): Observable<DetailedTaskAssignmentResponse[]> {
-        return this.http.get<DetailedTaskAssignmentResponse[]>(`${this.baseUrl}/trainee/${traineeId}`);
+    getTaskAssignmentsByTraineeId(userId: number): Observable<DetailedTaskAssignmentResponse[]> {
+        return this.http.get<DetailedTaskAssignmentResponse[]>(`${this.baseUrl}/trainee/${userId}`);
+    }
+
+    getTaskAssignmentsByMentorId(userId: number): Observable<DetailedTaskAssignmentResponse[]> {
+        return this.http.get<DetailedTaskAssignmentResponse[]>(`${this.baseUrl}/mentor/${userId}`);
     }
 }

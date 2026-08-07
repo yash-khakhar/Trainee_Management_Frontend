@@ -1,0 +1,5 @@
+export enum ReviewStatusEnum {
+    ACCEPTED = 'ACCEPTED',
+    CHANGESREQUIRED = 'CHANGESREQUIRED',
+    REJECTED = 'REJECTED'
+}

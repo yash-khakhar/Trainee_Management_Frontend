@@ -2,7 +2,7 @@
 
     <!-- Back Link -->
     <div class="mb-6">
-        <a routerLink="/trainees/dashboard"
+        <a [routerLink]="isMentor() ? '/mentors/dashboard' : '/trainees/dashboard'"
             class="text-sm font-semibold text-indigo-600 hover:text-indigo-800 flex items-center gap-1">
             &larr; Back to Dashboard
         </a>
@@ -72,54 +72,53 @@
                     d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
             <h3 class="text-lg font-bold text-emerald-900">Task Completed</h3>
-            <p class="text-sm text-emerald-700 max-w-md">This task assignment has been successfully completed and
-                approved.</p>
+            <p class="text-sm text-emerald-700 max-w-md">This task assignment has been successfully completed and approved.</p>
         </div>
     </div>
-    } @else {
-    <div class="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm mb-8">
-        <h3 class="text-lg font-bold text-gray-900 mb-4">Submit Your Work</h3>
+    } @else if(!isMentor()) {
+        <div class="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm mb-8">
+            <h3 class="text-lg font-bold text-gray-900 mb-4">Submit Your Work</h3>
 
-        <form #subForm="ngForm" (ngSubmit)="onSubmitWork(subForm)">
-            <!-- Submission URL -->
-            <div class="mb-4">
-                <label class="block text-sm font-semibold text-gray-700 mb-1">GitHub / Code URL</label>
-                <input type="url" name="submissionUrl" [(ngModel)]="submissionUrl" required #urlRef="ngModel"
-                    placeholder="https://github.com/username/repository"
-                    class="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none text-sm" />
-                @if (urlRef.invalid && (urlRef.dirty || urlRef.touched || subForm.submitted)) {
-                <p class="text-xs text-red-600 mt-1 font-medium">GitHub / Code URL is required.</p>
-                }
-            </div>
+            <form #subForm="ngForm" (ngSubmit)="onSubmitWork(subForm)">
+                <!-- Submission URL -->
+                <div class="mb-4">
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">GitHub / Code URL</label>
+                    <input type="url" name="submissionUrl" [(ngModel)]="submissionUrl" required #urlRef="ngModel"
+                        placeholder="https://github.com/username/repository"
+                        class="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none text-sm" />
+                    @if (urlRef.invalid && (urlRef.dirty || urlRef.touched || subForm.submitted)) {
+                    <p class="text-xs text-red-600 mt-1 font-medium">GitHub / Code URL is required.</p>
+                    }
+                </div>
 
-            <!-- Notes -->
-            <div class="mb-4">
-                <label class="block text-sm font-semibold text-gray-700 mb-1">Notes / Comments</label>
-                <textarea name="notes" [(ngModel)]="notes" rows="3" required #notesRef="ngModel"
-                    placeholder="Provide details about your implementation..."
-                    class="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none text-sm"></textarea>
-                @if (notesRef.invalid && (notesRef.dirty || notesRef.touched || subForm.submitted)) {
-                <p class="text-xs text-red-600 mt-1 font-medium">Notes / Comments are required.</p>
-                }
-            </div>
+                <!-- Notes -->
+                <div class="mb-4">
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Notes / Comments</label>
+                    <textarea name="notes" [(ngModel)]="notes" rows="3" required #notesRef="ngModel"
+                        placeholder="Provide details about your implementation..."
+                        class="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none text-sm"></textarea>
+                    @if (notesRef.invalid && (notesRef.dirty || notesRef.touched || subForm.submitted)) {
+                    <p class="text-xs text-red-600 mt-1 font-medium">Notes / Comments are required.</p>
+                    }
+                </div>
 
-            <!-- File Upload -->
-            <div class="mb-6">
-                <label class="block text-sm font-semibold text-gray-700 mb-1">Attach Files (.pdf, .doc, .txt)</label>
-                <input type="file" (change)="onFilesSelected($event)" multiple
-                    class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer" />
-                @if (isFileRequiredError) {
-                <p class="text-xs text-red-600 mt-1 font-medium">At least one file attachment is required.</p>
-                }
-            </div>
+                <!-- File Upload -->
+                <div class="mb-6">
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Attach Files (.pdf, .doc, .txt)</label>
+                    <input type="file" (change)="onFilesSelected($event)" multiple
+                        class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer" />
+                    @if (isFileRequiredError) {
+                    <p class="text-xs text-red-600 mt-1 font-medium">At least one file attachment is required.</p>
+                    }
+                </div>
 
-            <!-- Submit Button -->
-            <button type="submit" [disabled]="subForm.invalid || selectedFiles.length === 0 || isSubmitting()"
-                class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-semibold rounded-xl shadow-md transition duration-200">
-                @if (isSubmitting()) { Submitting... } @else { Submit Assignment }
-            </button>
-        </form>
-    </div>
+                <!-- Submit Button -->
+                <button type="submit" [disabled]="subForm.invalid || selectedFiles.length === 0 || isSubmitting()"
+                    class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-semibold rounded-xl shadow-md transition duration-200">
+                    @if (isSubmitting()) { Submitting... } @else { Submit Assignment }
+                </button>
+            </form>
+        </div>
     }
 
     <!-- Submission History Section -->
@@ -136,11 +135,9 @@
                 <thead class="bg-gray-50 sticky top-0">
                     <tr>
                         <th class="px-4 py-3 font-semibold text-gray-700 uppercase tracking-wider text-xs">ID</th>
-                        <th class="px-4 py-3 font-semibold text-gray-700 uppercase tracking-wider text-xs">Submission
-                            URL</th>
+                        <th class="px-4 py-3 font-semibold text-gray-700 uppercase tracking-wider text-xs">Submission URL</th>
                         <th class="px-4 py-3 font-semibold text-gray-700 uppercase tracking-wider text-xs">Notes</th>
-                        <th class="px-4 py-3 font-semibold text-gray-700 uppercase tracking-wider text-xs">Submitted
-                            Date</th>
+                        <th class="px-4 py-3 font-semibold text-gray-700 uppercase tracking-wider text-xs">Submitted Date</th>
                         <th class="px-4 py-3 font-semibold text-gray-700 uppercase tracking-wider text-xs">Status</th>
                     </tr>
                 </thead>
@@ -178,33 +175,141 @@
                     @if (selectedSubmissionId() === sub.id) {
                     <tr>
                         <td colspan="5" class="bg-gray-50/80 p-4 border-b border-gray-200">
-                            <div class="rounded-xl bg-white p-4 border border-gray-200 shadow-sm">
-                                <h4 class="text-xs font-bold uppercase tracking-wider text-gray-500 mb-3">
-                                    Attached Files for Submission #{{ sub.id }}
-                                </h4>
-                                @if (isFetchingFiles()) {
-                                <p class="text-xs text-gray-400 py-2">Loading files...</p>
-                                } @else {
-                                <div class="space-y-2">
-                                    @for (file of submissionFiles(); track file.id) {
-                                    <div
-                                        class="flex items-center justify-between text-xs bg-gray-50 p-2.5 rounded-lg border border-gray-100">
-                                        <span class="font-medium text-gray-800">{{ file.fileName }}</span>
-                                        <span class="text-gray-400">({{ (file.fileSizeInBytes / 1024).toFixed(1) }}
-                                            KB)</span>
-                                    </div>
-                                    <button type="button" (click)="downloadFile(file, $event)"
-                                        [disabled]="downloadingFileId() === file.id"
-                                        class="px-3 py-1 bg-indigo-50 hover:bg-indigo-600 hover:text-white text-indigo-700 font-semibold rounded-md transition duration-150 shrink-0 flex items-center gap-1 disabled:opacity-50">
-                                        @if (downloadingFileId() === file.id) {
-                                        <span>Downloading...</span>
-                                        } @else {
-                                        <span>Download</span>
+                            <div class="rounded-xl bg-white p-5 border border-gray-200 shadow-sm space-y-5">
+                                
+                                <!-- Attached Files Section -->
+                                <div>
+                                    <h4 class="text-xs font-bold uppercase tracking-wider text-gray-500 mb-3">
+                                        Attached Files for Submission #{{ sub.id }}
+                                    </h4>
+                                    @if (isFetchingFiles()) {
+                                    <p class="text-xs text-gray-400 py-2">Loading files...</p>
+                                    } @else if (submissionFiles().length === 0) {
+                                    <p class="text-xs text-gray-400 py-1">No files attached to this submission.</p>
+                                    } @else {
+                                    <div class="space-y-2">
+                                        @for (file of submissionFiles(); track file.id) {
+                                        <div class="flex items-center justify-between text-xs bg-gray-50 p-2.5 rounded-lg border border-gray-100">
+                                            <div class="flex items-center gap-2">
+                                                <span class="font-medium text-gray-800">{{ file.fileName }}</span>
+                                                <span class="text-gray-400">({{ (file.fileSizeInBytes / 1024).toFixed(1) }} KB)</span>
+                                            </div>
+                                            <button type="button" (click)="downloadFile(file, $event)"
+                                                [disabled]="downloadingFileId() === file.id"
+                                                class="px-3 py-1 bg-indigo-50 hover:bg-indigo-600 hover:text-white text-indigo-700 font-semibold rounded-md transition duration-150 shrink-0 flex items-center gap-1 disabled:opacity-50">
+                                                @if (downloadingFileId() === file.id) {
+                                                <span>Downloading...</span>
+                                                } @else {
+                                                <span>Download</span>
+                                                }
+                                            </button>
+                                        </div>
                                         }
-                                    </button>
+                                    </div>
                                     }
                                 </div>
-                                }
+
+                                <!-- Review Section: Display if review exists, else Form if Mentor -->
+                                <div class="pt-4 border-t border-gray-200">
+                                    @if (isFetchingReview()) {
+                                    <p class="text-xs text-gray-400 py-2">Checking review status...</p>
+                                    } @else if (currentSubmissionReview()) {
+                                    <!-- Display Existing Review Details (Visible to both Mentor and Trainee) -->
+                                    <div class="bg-indigo-50/60 rounded-xl p-4 border border-indigo-100 space-y-3">
+                                        <div class="flex items-center justify-between">
+                                            <div class="flex items-center gap-2">
+                                                <div class="w-2 h-2 rounded-full bg-indigo-600"></div>
+                                                <h4 class="text-xs font-bold uppercase tracking-wider text-indigo-950">
+                                                    Mentor Review Details
+                                                </h4>
+                                            </div>
+                                            <span class="px-2.5 py-1 font-semibold rounded-full text-[10px]"
+                                                [class.bg-emerald-100]="currentSubmissionReview()?.status === 'ACCEPTED'"
+                                                [class.text-emerald-800]="currentSubmissionReview()?.status === 'ACCEPTED'"
+                                                [class.bg-amber-100]="currentSubmissionReview()?.status === 'CHANGESREQUIRED'"
+                                                [class.text-amber-800]="currentSubmissionReview()?.status === 'CHANGESREQUIRED'"
+                                                [class.bg-red-100]="currentSubmissionReview()?.status === 'REJECTED'"
+                                                [class.text-red-800]="currentSubmissionReview()?.status === 'REJECTED'">
+                                                {{ currentSubmissionReview()?.status }}
+                                            </span>
+                                        </div>
+
+                                        <div class="grid grid-cols-2 gap-4 text-xs">
+                                            <div>
+                                                <span class="block text-gray-400 font-medium">Score</span>
+                                                <span class="font-bold text-indigo-900 text-sm">{{ currentSubmissionReview()?.score }} / 100</span>
+                                            </div>
+                                            <div>
+                                                <span class="block text-gray-400 font-medium">Review Date</span>
+                                                <span class="font-semibold text-gray-800">{{ currentSubmissionReview()?.reviewDate | date:'mediumDate' }}</span>
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <span class="block text-gray-400 font-medium text-xs mb-1">Feedback</span>
+                                            <p class="text-xs text-gray-700 bg-white p-3 rounded-lg border border-indigo-100 leading-relaxed">
+                                                {{ currentSubmissionReview()?.feedback }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    } @else if (isMentor()) {
+                                    <!-- Mentor Review Form (Only if no review has been added yet) -->
+                                    <div class="flex items-center gap-2 mb-3">
+                                        <div class="w-2 h-2 rounded-full bg-indigo-600"></div>
+                                        <h4 class="text-xs font-bold uppercase tracking-wider text-indigo-900">
+                                            Review Submission #{{ sub.id }}
+                                        </h4>
+                                    </div>
+
+                                    <form #reviewForm="ngForm" (ngSubmit)="onSubmitReview(sub.id, reviewForm)" class="space-y-3" (click)="$event.stopPropagation()">
+                                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                            <!-- Score -->
+                                            <div>
+                                                <label class="block text-xs font-semibold text-gray-700 mb-1">Score (0-100)</label>
+                                                <input type="number" name="reviewScore" [(ngModel)]="reviewScore" required min="0" max="100" #scoreRef="ngModel"
+                                                    placeholder="e.g. 85"
+                                                    class="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none text-xs" />
+                                                @if (scoreRef.invalid && (scoreRef.dirty || scoreRef.touched || reviewForm.submitted)) {
+                                                <p class="text-[10px] text-red-600 mt-0.5 font-medium">Valid score (0-100) is required.</p>
+                                                }
+                                            </div>
+
+                                            <!-- Status -->
+                                            <div>
+                                                <label class="block text-xs font-semibold text-gray-700 mb-1">Review Status</label>
+                                                <select name="reviewStatus" [(ngModel)]="reviewStatus" required
+                                                    class="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none text-xs bg-white">
+                                                    @for (stat of reviewStatuses; track stat) {
+                                                    <option [value]="stat">{{ stat }}</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <!-- Feedback -->
+                                        <div>
+                                            <label class="block text-xs font-semibold text-gray-700 mb-1">Feedback Remarks</label>
+                                            <textarea name="reviewFeedback" [(ngModel)]="reviewFeedback" rows="2" required #feedbackRef="ngModel"
+                                                placeholder="Provide detailed constructive feedback..."
+                                                class="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none text-xs"></textarea>
+                                            @if (feedbackRef.invalid && (feedbackRef.dirty || feedbackRef.touched || reviewForm.submitted)) {
+                                            <p class="text-[10px] text-red-600 mt-0.5 font-medium">Feedback comments are required.</p>
+                                            }
+                                        </div>
+
+                                        <!-- Submit Review Action Button -->
+                                        <div class="flex justify-end">
+                                            <button type="submit" [disabled]="reviewForm.invalid || isSubmittingReview()"
+                                                class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white text-xs font-semibold rounded-lg shadow-sm transition duration-150">
+                                                @if (isSubmittingReview()) { Submitting Review... } @else { Save Review }
+                                            </button>
+                                        </div>
+                                    </form>
+                                    } @else {
+                                    <p class="text-xs text-gray-400 py-1">No review has been submitted for this submission yet.</p>
+                                    }
+                                </div>
+
                             </div>
                         </td>
                     </tr>

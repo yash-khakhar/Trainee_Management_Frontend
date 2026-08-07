@@ -33,8 +33,10 @@ export class LoginComponent {
         if(user !== null){
             if(user.role === UserRolesEnum.ADMIN){
                 this.router.navigate(['/admin']);    
-            } else{
+            } else if(user.role === UserRolesEnum.TRAINEE){
                 this.router.navigate(['/trainees']);
+            } else{
+                this.router.navigate(['/mentors']);
             }
         }
     }
@@ -59,8 +61,10 @@ export class LoginComponent {
                 this.isLoading.set(false);
                 if(user.role === UserRolesEnum.ADMIN){
                     this.router.navigate(['/admin']);    
-                } else{
+                } else if(user.role === UserRolesEnum.TRAINEE){
                     this.router.navigate(['/trainees']);
+                } else{
+                    this.router.navigate(['/mentors']);
                 }
             },
             error: (err) => {
