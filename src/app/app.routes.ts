@@ -1,8 +1,8 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
 import { UserRolesEnum } from './features/auth/enums/user-roles.enum';
-import { TraineeLayoutComponent } from './features/trainees/trainee-layout/trainee-layout.component';
-import { MentorLayoutComponent } from './features/mentors/mentor-layout/mentor-layout.component';
+import { TraineeLayoutComponent } from './features/trainees/components/trainee-layout/trainee-layout.component';
+import { MentorLayoutComponent } from './features/mentors/components/mentor-layout/mentor-layout.component';
 
 export const routes: Routes = [
 
@@ -36,11 +36,6 @@ export const routes: Routes = [
             roles: [UserRolesEnum.ADMIN]
         },
         loadChildren: () => import('./features/admin/admin.routes').then(r => r.ADMIN_ROUTES)
-    },
-
-    {
-        path: 'unauthorized',
-        loadComponent: () => import('./shared/components/unauthorized/unauthorized').then(c => c.Unauthorized)
     },
 
     {

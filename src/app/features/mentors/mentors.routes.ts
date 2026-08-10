@@ -17,7 +17,7 @@ export const MENTORS_ROUTES: Routes = [
         data: {
             roles: [UserRolesEnum.MENTOR]
         },
-        loadComponent: () => import('./dashboard/dashboard.component').then(m => m.DashboardComponent)
+        loadComponent: () => import('./components/dashboard/dashboard.component').then(m => m.DashboardComponent)
     },
 
     {
@@ -26,7 +26,7 @@ export const MENTORS_ROUTES: Routes = [
         data: {
             roles: [UserRolesEnum.MENTOR]
         },
-        loadComponent: () => import('../task-assignment/task-assignment-detail/task-assignment-detail.component').then(m => m.TaskAssignmentDetailComponent)
+        loadComponent: () => import('../task-assignment/components/task-assignment-detail/task-assignment-detail.component').then(m => m.TaskAssignmentDetailComponent)
     },
 
 ];

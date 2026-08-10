@@ -15,7 +15,7 @@ export const ADMIN_ROUTES: Routes = [
 
     {
         path: 'create-user',
-        loadComponent: () => import('../auth/add-user/add-user.component').then(c => c.AddUserComponent)
+        loadComponent: () => import('../auth/components/add-user/add-user.component').then(c => c.AddUserComponent)
     },
 
     {
@@ -23,18 +23,18 @@ export const ADMIN_ROUTES: Routes = [
         children: [
             {
                 path: '',
-                loadComponent: () => import('../trainees/trainee-list/view-trainee-list.component').then(c => c.ViewTraineesListComponent)
+                loadComponent: () => import('../trainees/components/trainee-list/view-trainee-list.component').then(c => c.ViewTraineesListComponent)
             },
             {
                 path: ':id',
                 children: [
                     {
                         path: '',
-                        loadComponent: () => import('../trainees/trainee-details/trainee-details.component').then(c => c.TraineeDetailComponent)
+                        loadComponent: () => import('../trainees/components/trainee-details/trainee-details.component').then(c => c.TraineeDetailComponent)
                     },
                     {
                         path: 'edit',
-                        loadComponent: () => import('../trainees/edit-trainee/edit-trainee.component').then(c => c.EditUserComponent)
+                        loadComponent: () => import('../trainees/components/edit-trainee/edit-trainee.component').then(c => c.EditUserComponent)
                     }
                 ],
                 
@@ -47,18 +47,18 @@ export const ADMIN_ROUTES: Routes = [
         children: [
             {
                 path: '',
-                loadComponent: () => import('../mentors/mentor-list/view-mentor-list.component').then(c => c.ViewMentorsListComponent)
+                loadComponent: () => import('../mentors/components/mentor-list/view-mentor-list.component').then(c => c.ViewMentorsListComponent)
             },
             {
                 path: ':id',
                 children: [
                     {
                         path: '',
-                        loadComponent: () => import('../mentors/mentor-details/mentor-details.component').then(c => c.MentorDetailComponent)
+                        loadComponent: () => import('../mentors/components/mentor-details/mentor-details.component').then(c => c.MentorDetailComponent)
                     },
                     {
                         path: 'edit',
-                        loadComponent: () => import('../mentors/edit-mentor/edit-mentor.component').then(c => c.EditMentorComponent)
+                        loadComponent: () => import('../mentors/components/edit-mentor/edit-mentor.component').then(c => c.EditMentorComponent)
                     }
                 ],
                 
@@ -71,11 +71,11 @@ export const ADMIN_ROUTES: Routes = [
         children: [
             {
                 path: '',
-                loadComponent: () => import('../learning-tasks/learning-tasks-list/learning-tasks-list.component').then(c => c.LearningTaskListComponent)
+                loadComponent: () => import('../learning-tasks/components/learning-tasks-list/learning-tasks-list.component').then(c => c.LearningTaskListComponent)
             },
             {
                 path: 'add',
-                loadComponent: () => import('../learning-tasks/add-learning-task/add-learning-task.component').then(c => c.LearningTaskCreateComponent)
+                loadComponent: () => import('../learning-tasks/components/add-learning-task/add-learning-task.component').then(c => c.LearningTaskCreateComponent)
             },
             {
                 path: ':id',
@@ -83,7 +83,7 @@ export const ADMIN_ROUTES: Routes = [
                     
                     {
                         path: 'edit',
-                        loadComponent: () => import('../learning-tasks/edit-learning-task/edit-learning-task.component').then(c => c.LearningTaskEditComponent)
+                        loadComponent: () => import('../learning-tasks/components/edit-learning-task/edit-learning-task.component').then(c => c.LearningTaskEditComponent)
                     }
                 ],
                 
@@ -96,19 +96,19 @@ export const ADMIN_ROUTES: Routes = [
         children: [
             {
                 path: '',
-                loadComponent: () => import('../task-assignment/view-task-assignment/view-task-assignment.component').then(c => c.ViewTaskAssignmentsComponent)
+                loadComponent: () => import('../task-assignment/components/view-task-assignment/view-task-assignment.component').then(c => c.ViewTaskAssignmentsComponent)
 
             },
             {
                 path: 'add',
-                loadComponent: () => import('../task-assignment/add-task-assignment/add-task-assignment.component').then(c => c.AddTaskAssignmentComponent)
+                loadComponent: () => import('../task-assignment/components/add-task-assignment/add-task-assignment.component').then(c => c.AddTaskAssignmentComponent)
             }
         ]
     },
 
     {
         path: '**',
-        loadComponent: () => import('./not-found/not-found.component').then(c => c.NotFoundComponent)
+        loadComponent: () => import('./components/not-found/not-found.component').then(c => c.NotFoundComponent)
     }
 
 ];
